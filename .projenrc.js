@@ -6,6 +6,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
   defaultReleaseBranch: 'main',
   name: 'cdk-github',
   repositoryUrl: 'https://github.com/wtfjoke/cdk-github.git',
+  license: 'MIT',
+  copyrightOwner: 'Manuel <WtfJoke>',
+  copyrightPeriod: '2022',
 
   // deps: [],                /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
