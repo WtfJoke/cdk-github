@@ -41,6 +41,14 @@
       ],
       "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
     },
+    "cdk:githubreposecret:deploy": {
+      "name": "cdk:githubreposecret:deploy",
+      "steps": [
+        {
+          "exec": "npx cdk deploy --app \"npx ts-node --prefer-ts-exts src/examples/github-repository-secret/github-repository-secret-app.ts\""
+        }
+      ]
+    },
     "clobber": {
       "name": "clobber",
       "description": "hard resets to HEAD of origin and cleans the local repo",

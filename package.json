@@ -1,5 +1,6 @@
 {
   "name": "cdk-github",
+  "description": "A CDK library for GitHub",
   "repository": {
     "type": "git",
     "url": "https://github.com/wtfjoke/cdk-github.git"
@@ -7,6 +8,7 @@
   "scripts": {
     "build": "npx projen build",
     "bump": "npx projen bump",
+    "cdk:githubreposecret:deploy": "npx projen cdk:githubreposecret:deploy",
     "clobber": "npx projen clobber",
     "compat": "npx projen compat",
     "compile": "npx projen compile",
@@ -35,12 +37,15 @@
     "organization": false
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.97",
     "@types/jest": "^27.5.1",
+    "@types/libsodium-wrappers": "^0.7.9",
     "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "aws-cdk-lib": "2.1.0",
+    "aws-cdk-lib": "2.25.0",
     "constructs": "10.0.5",
+    "esbuild": "^0.14.39",
     "eslint": "^8",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-import-resolver-typescript": "^2.7.1",
@@ -59,9 +64,21 @@
     "typescript": "^4.7.2"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "^2.1.0",
+    "aws-cdk-lib": "^2.25.0",
     "constructs": "^10.0.5"
   },
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.100.0",
+    "@octokit/rest": "^18.12.0",
+    "libsodium": "^0.7.10",
+    "libsodium-wrappers": "^0.7.10"
+  },
+  "bundledDependencies": [
+    "@aws-sdk/client-secrets-manager",
+    "@octokit/rest",
+    "libsodium",
+    "libsodium-wrappers"
+  ],
   "keywords": [
     "cdk"
   ],
