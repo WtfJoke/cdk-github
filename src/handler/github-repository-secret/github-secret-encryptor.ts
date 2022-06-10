@@ -1,3 +1,4 @@
+// Need to import it like that because projen doesnt support esModuleInterop
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const _sodium = require('libsodium-wrappers');
 
@@ -7,6 +8,7 @@ async function async_encrypt(messageBytes: Buffer, publicKey: Buffer) {
   const libsodium = _sodium;
   return libsodium.crypto_box_seal(messageBytes, publicKey);
 }
+
 export const encryptValue = async(valueToEncrypt: string, key: string) => {
   // Convert the message and key to Uint8Array's (Buffer implements that interface)
   const messageBytes = Buffer.from(valueToEncrypt);

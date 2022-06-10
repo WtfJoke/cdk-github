@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { CustomResource, Duration } from 'aws-cdk-lib';
+import { CustomResource, Duration, Stack } from 'aws-cdk-lib';
 import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
@@ -38,6 +38,7 @@ export class GitHubRepositorySecret extends Construct {
   constructor(scope: Construct, id: string, props: GitHubRepositorySecretProps) {
     super(scope, id);
     const { githubTokenSecret, repositorySecretName, repositoryName, repositoryOwner, sourceSecret } = props;
+    const awsRegion = Stack.of(this).region;
 
     const handler = new NodejsFunction(this, 'CustomResourceHandler', {
       functionName: 'GitHubRepositorySecretCustomResourceHandler',
@@ -65,6 +66,7 @@ export class GitHubRepositorySecret extends Construct {
         repositoryName,
         sourceSecretArn: sourceSecret.secretArn,
         repositorySecretName,
+        awsRegion,
       },
     });
   }

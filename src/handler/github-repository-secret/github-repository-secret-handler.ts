@@ -8,7 +8,7 @@ import { encryptValue } from './github-secret-encryptor';
 
 const onEvent = async (event: OnEventRequest) => {
   console.log(`Event: ${JSON.stringify(event)}`);
-  const smClient = new SecretsManagerClient({});
+  const smClient = new SecretsManagerClient({ region: event.ResourceProperties.awsRegion });
   const githubTokenSecret = await smClient.send(new GetSecretValueCommand({ SecretId: event.ResourceProperties.githubTokenSecret }));
   const octokit = new Octokit({ auth: githubTokenSecret.SecretString });
 
@@ -21,14 +21,14 @@ const onEvent = async (event: OnEventRequest) => {
     case 'Delete':
       return onDelete(event, octokit);
     default:
-      throw new Error(`unexpected request type ${requestType}`);
+      throw new Error(`Unexpected request type: '${requestType}'`);
   }
 };
 
 const onCreate = async (event: OnEventRequest, octokit: Octokit, smClient: SecretsManagerClient) => {
   const props = event.ResourceProperties;
   const physicalId = event.PhysicalResourceId;
-  console.log('create new resource with props ' + JSON.stringify(props));
+  console.log('Create new resource with props ' + JSON.stringify(props));
 
   await createOrUpdateRepoSecret(event, octokit, smClient);
   return { PhysicalResourceId: physicalId };
@@ -37,7 +37,8 @@ const onCreate = async (event: OnEventRequest, octokit: Octokit, smClient: Secre
 const onUpdate = async (event: OnEventRequest, octokit: Octokit, smClient: SecretsManagerClient) => {
   const props = event.ResourceProperties;
   const physicalId = event.PhysicalResourceId;
-  console.log(`update resource ${physicalId} with props ${JSON.stringify(props)}`);
+  console.log(`Update resource ${physicalId} with props ${JSON.stringify(props)}`);
+
   await createOrUpdateRepoSecret(event, octokit, smClient);
   return { PhysicalResourceId: physicalId };
 
@@ -45,7 +46,7 @@ const onUpdate = async (event: OnEventRequest, octokit: Octokit, smClient: Secre
 
 const onDelete = async (event: OnEventRequest, octokit: Octokit) => {
   const physicalId = event.PhysicalResourceId;
-  console.log('delete resource ' + physicalId);
+  console.log('Delete resource ' + physicalId);
   await deleteRepoSecret(event, octokit);
   return { PhysicalResourceId: physicalId };
 };
@@ -53,10 +54,7 @@ const onDelete = async (event: OnEventRequest, octokit: Octokit) => {
 
 const createOrUpdateRepoSecret = async (event: OnEventRequest, octokit: Octokit, smClient: SecretsManagerClient) => {
   const { repositoryOwner: owner, repositoryName: repo, repositorySecretName } = event.ResourceProperties;
-
-  const { data } = await octokit.rest.actions.getRepoPublicKey({ owner, repo });
   const secretId = event.ResourceProperties.sourceSecretArn;
-
   const secretToEncrypt = await smClient.send(new GetSecretValueCommand({ SecretId: secretId }));
   console.log(`Encrypt value of secret with id: ${secretId}`);
 
@@ -65,6 +63,7 @@ const createOrUpdateRepoSecret = async (event: OnEventRequest, octokit: Octokit,
     throw new Error('SecretString is empty from secret with id: ' + secretId);
   }
 
+  const { data } = await octokit.rest.actions.getRepoPublicKey({ owner, repo });
   const encryptedSecret = await encryptValue(secretString, data.key);
   console.log('Encrypted secret, attempting to create/update github secret');
 
