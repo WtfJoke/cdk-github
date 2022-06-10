@@ -18,5 +18,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
   scripts: {
     'cdk:githubreposecret:deploy': 'npx cdk deploy --app "npx ts-node --prefer-ts-exts src/examples/github-repository-secret/github-repository-secret-app.ts"',
   },
+  codeCov: true,
 });
 project.synth();
