@@ -1,5 +1,5 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
-import { Octokit } from '@octokit/rest';
+import { Octokit } from '@octokit/core';
 import type { OnEventRequest, ActionSecretEventProps } from '../../types';
 
 import { encryptValue } from './github-secret-encryptor';
@@ -74,11 +74,12 @@ const createOrUpdateRepoSecret = async (
     throw new Error('SecretString is empty from secret with id: ' + secretId);
   }
 
-  const { data } = await octokit.rest.actions.getRepoPublicKey({ owner, repo });
+  const { data } = await octokit.request('GET /repos/{owner}/{repo}/actions/secrets/public-key', { owner, repo });
+
   const encryptedSecret = await encryptValue(secretString, data.key);
   console.log('Encrypted secret, attempting to create/update github secret');
 
-  const secretResponse = await octokit.rest.actions.createOrUpdateRepoSecret({
+  const secretResponse = await octokit.request('PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}', {
     owner,
     repo,
     secret_name,
@@ -94,13 +95,13 @@ const deleteRepoSecret = async (
   octokit: Octokit,
 ) => {
   const { repositoryOwner: owner, repositoryName: repo, repositorySecretName: secret_name } = event.ResourceProperties;
-  const secretResponse = await octokit.rest.actions.deleteRepoSecret({
+  const deleteSecretResponse = await octokit.request('DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}', {
     owner,
     repo,
     secret_name,
   });
-  console.log(`Delete: ${JSON.stringify(secretResponse)}`);
-  return secretResponse;
+  console.log(`Delete: ${JSON.stringify(deleteSecretResponse)}`);
+  return deleteSecretResponse;
 };
 
 export const handler = onEvent;

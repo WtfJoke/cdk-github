@@ -124,7 +124,7 @@
       "type": "bundled"
     },
     {
-      "name": "@octokit/rest",
+      "name": "@octokit/core",
       "type": "bundled"
     },
     {
@@ -150,7 +150,7 @@
       "type": "runtime"
     },
     {
-      "name": "@octokit/rest",
+      "name": "@octokit/core",
       "type": "runtime"
     },
     {

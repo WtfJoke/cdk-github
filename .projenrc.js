@@ -10,8 +10,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   copyrightOwner: 'Manuel <WtfJoke>',
   copyrightPeriod: '2022',
 
-  deps: ['@octokit/rest', 'libsodium', 'libsodium-wrappers', '@aws-sdk/client-secrets-manager'], /* Runtime dependencies of this module. */
-  bundledDeps: ['@octokit/rest', 'libsodium', 'libsodium-wrappers', '@aws-sdk/client-secrets-manager'], /* Dependencies that are bundled with this module. */
+  deps: ['@octokit/core', 'libsodium', 'libsodium-wrappers', '@aws-sdk/client-secrets-manager'], /* Runtime dependencies of this module. */
+  bundledDeps: ['@octokit/core', 'libsodium', 'libsodium-wrappers', '@aws-sdk/client-secrets-manager'], /* Dependencies that are bundled with this module. */
   description: 'A CDK library for GitHub',
   devDeps: ['esbuild', '@types/libsodium-wrappers', '@types/aws-lambda', 'nock', 'aws-sdk-client-mock'], /* Build dependencies for this module. */
   gitignore: ['cdk.out'],
