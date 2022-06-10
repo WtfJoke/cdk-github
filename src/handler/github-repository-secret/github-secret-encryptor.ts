@@ -9,7 +9,7 @@ async function async_encrypt(messageBytes: Buffer, publicKey: Buffer) {
   return libsodium.crypto_box_seal(messageBytes, publicKey);
 }
 
-export const encryptValue = async(valueToEncrypt: string, key: string) => {
+export const encryptValue = async (valueToEncrypt: string, key: string) => {
   // Convert the message and key to Uint8Array's (Buffer implements that interface)
   const messageBytes = Buffer.from(valueToEncrypt);
   const keyBytes = Buffer.from(key, 'base64');

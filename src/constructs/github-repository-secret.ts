@@ -6,6 +6,7 @@ import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
+import { GitHubRepositorySecretEventProps } from '../types';
 
 export interface GitHubRepositorySecretProps {
   /**
@@ -44,7 +45,7 @@ export class GitHubRepositorySecret extends Construct {
       functionName: 'GitHubRepositorySecretCustomResourceHandler',
       description: 'Handles the creation/deletion of a GitHub repository secret - created by cdk-github',
       runtime: Runtime.NODEJS_16_X,
-      entry: path.join(__dirname, 'handler', 'github-repository-secret', 'github-repository-secret-handler.ts'),
+      entry: path.join(__dirname, '..', 'handler', 'github-repository-secret', 'github-repository-secret-handler.ts'),
       architecture: Architecture.ARM_64,
       timeout: Duration.minutes(10),
     });
@@ -57,17 +58,19 @@ export class GitHubRepositorySecret extends Construct {
       logRetention: RetentionDays.ONE_WEEK,
     });
 
+    const githubRepositorySecretEventProps: GitHubRepositorySecretEventProps = {
+      githubTokenSecret: githubTokenSecret.secretArn,
+      repositoryOwner,
+      repositoryName,
+      sourceSecretArn: sourceSecret.secretArn,
+      repositorySecretName,
+      awsRegion,
+    };
+
     new CustomResource(this, 'CustomResource', {
       serviceToken: provider.serviceToken,
       resourceType: 'Custom::GithubRepositorySecret',
-      properties: {
-        githubTokenSecret: githubTokenSecret.secretArn,
-        repositoryOwner,
-        repositoryName,
-        sourceSecretArn: sourceSecret.secretArn,
-        repositorySecretName,
-        awsRegion,
-      },
+      properties: githubRepositorySecretEventProps,
     });
   }
 }
