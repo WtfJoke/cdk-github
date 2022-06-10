@@ -1,10 +1,10 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 import { Octokit } from '@octokit/rest';
-import type { OnEventRequest, GitHubRepositorySecretEventProps } from '../../types';
+import type { OnEventRequest, ActionSecretEventProps } from '../../types';
 
 import { encryptValue } from './github-secret-encryptor';
 
-const onEvent = async (event: OnEventRequest<GitHubRepositorySecretEventProps>) => {
+const onEvent = async (event: OnEventRequest<ActionSecretEventProps>) => {
   console.log(`Event: ${JSON.stringify(event)}`);
   const smClient = new SecretsManagerClient({ region: event.ResourceProperties.awsRegion });
   const githubTokenSecret = await smClient.send(new GetSecretValueCommand({ SecretId: event.ResourceProperties.githubTokenSecret }));
@@ -24,7 +24,7 @@ const onEvent = async (event: OnEventRequest<GitHubRepositorySecretEventProps>) 
 };
 
 const onCreate = async (
-  event: OnEventRequest<GitHubRepositorySecretEventProps>,
+  event: OnEventRequest<ActionSecretEventProps>,
   octokit: Octokit,
   smClient: SecretsManagerClient,
 ) => {
@@ -37,7 +37,7 @@ const onCreate = async (
 };
 
 const onUpdate = async (
-  event: OnEventRequest<GitHubRepositorySecretEventProps>,
+  event: OnEventRequest<ActionSecretEventProps>,
   octokit: Octokit,
   smClient: SecretsManagerClient,
 ) => {
@@ -50,7 +50,7 @@ const onUpdate = async (
 };
 
 const onDelete = async (
-  event: OnEventRequest<GitHubRepositorySecretEventProps>,
+  event: OnEventRequest<ActionSecretEventProps>,
   octokit: Octokit,
 ) => {
   const physicalId = event.PhysicalResourceId;
@@ -60,7 +60,7 @@ const onDelete = async (
 };
 
 const createOrUpdateRepoSecret = async (
-  event: OnEventRequest<GitHubRepositorySecretEventProps>,
+  event: OnEventRequest<ActionSecretEventProps>,
   octokit: Octokit,
   smClient: SecretsManagerClient,
 ) => {
@@ -90,7 +90,7 @@ const createOrUpdateRepoSecret = async (
 };
 
 const deleteRepoSecret = async (
-  event: OnEventRequest<GitHubRepositorySecretEventProps>,
+  event: OnEventRequest<ActionSecretEventProps>,
   octokit: Octokit,
 ) => {
   const { repositoryOwner: owner, repositoryName: repo, repositorySecretName: secret_name } = event.ResourceProperties;

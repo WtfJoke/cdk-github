@@ -16,32 +16,32 @@ JavaScript/TypeScript:
 # Constructs
 
 This library provides the following constructs:
-- [GitHubRepositorySecret](API.md#githubrepositorysecret-a-name"githubrepositorysecret"-id"cdk-githubgithubrepositorysecret"a) - Create a GitHub Repository Secret from a given AWS Secrets Manager secret.
+- [ActionSecret](API.md#actionsecret-a-nameactionsecret-idcdk-githubactionsecreta) - Creates a [GitHub Action (repository) secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository) from a given AWS Secrets Manager secret.
 
 # Authentication
 Currently the constructs only support authentication via a [GitHub Personal Access Token](https://github.com/settings/tokens/new). The token needs to be a stored in a AWS SecretsManager Secret and passed to the construct as parameter.
 # Examples
 
-## GitHubRepositorySecret
+## ActionSecret
 
 ```typescript
-import { GitHubRepositorySecret } from 'wtfjoke/cdk-github';
+import { ActionSecret } from 'wtfjoke/cdk-github';
 
-export class GitHubRepositorySecretStack extends Stack {
+export class ActionSecretStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const sourceSecret = Secret.fromSecretNameV2(this, 'secretToStoreInGithub', 'testcdkgithub' );
-    const githubTokenSecret = Secret.fromSecretNameV2(this, 'ghSecret', 'GITHUB_TOKEN' );
+    const sourceSecret = Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', 'testcdkgithub');
+    const githubTokenSecret = Secret.fromSecretNameV2(this, 'ghSecret', 'GITHUB_TOKEN');
 
-    new GitHubRepositorySecret(this, 'GithubSecret', {
+    new ActionSecret(this, 'GitHubActionSecret', {
       githubTokenSecret,
       repositoryName: 'cdk-github',
       repositoryOwner: 'wtfjoke',
-      repositorySecretName: 'aRandomGithubSecret',
+      repositorySecretName: 'aRandomGitHubSecret',
       sourceSecret,
     });
   }
 }
 ```
-See full example in [GitHubRepositorySecretStack](src/examples/github-repository-secret/github-repository-secret-stack.ts)
+See full example in [ActionSecretStack](src/examples/action-secret/action-secret-stack.ts)

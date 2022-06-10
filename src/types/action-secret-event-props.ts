@@ -1,4 +1,4 @@
-export type GitHubRepositorySecretEventProps = {
+export type ActionSecretEventProps = {
   githubTokenSecret: string;
   repositoryOwner: string;
   repositoryName: string;

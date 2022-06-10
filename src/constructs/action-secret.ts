@@ -6,9 +6,9 @@ import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
-import { GitHubRepositorySecretEventProps } from '../types';
+import { ActionSecretEventProps } from '../types';
 
-export interface GitHubRepositorySecretProps {
+export interface ActionSecretProps {
   /**
    * The AWS secret in which the OAuth GitHub (personal) access token is stored
    */
@@ -35,17 +35,17 @@ export interface GitHubRepositorySecretProps {
   readonly sourceSecret: ISecret;
 }
 
-export class GitHubRepositorySecret extends Construct {
-  constructor(scope: Construct, id: string, props: GitHubRepositorySecretProps) {
+export class ActionSecret extends Construct {
+  constructor(scope: Construct, id: string, props: ActionSecretProps) {
     super(scope, id);
     const { githubTokenSecret, repositorySecretName, repositoryName, repositoryOwner, sourceSecret } = props;
     const awsRegion = Stack.of(this).region;
 
     const handler = new NodejsFunction(this, 'CustomResourceHandler', {
-      functionName: 'GitHubRepositorySecretCustomResourceHandler',
-      description: 'Handles the creation/deletion of a GitHub repository secret - created by cdk-github',
+      functionName: 'GitHubActionSecretCustomResourceHandler',
+      description: 'Handles the creation/deletion of a GitHub Action (repository) secret - created by cdk-github',
       runtime: Runtime.NODEJS_16_X,
-      entry: path.join(__dirname, '..', 'handler', 'github-repository-secret', 'github-repository-secret-handler.ts'),
+      entry: path.join(__dirname, '..', 'handler', 'action-secrets', 'action-secret-handler.ts'),
       architecture: Architecture.ARM_64,
       timeout: Duration.minutes(10),
     });
@@ -58,7 +58,7 @@ export class GitHubRepositorySecret extends Construct {
       logRetention: RetentionDays.ONE_WEEK,
     });
 
-    const githubRepositorySecretEventProps: GitHubRepositorySecretEventProps = {
+    const githubRepositorySecretEventProps: ActionSecretEventProps = {
       githubTokenSecret: githubTokenSecret.secretArn,
       repositoryOwner,
       repositoryName,
@@ -69,7 +69,7 @@ export class GitHubRepositorySecret extends Construct {
 
     new CustomResource(this, 'CustomResource', {
       serviceToken: provider.serviceToken,
-      resourceType: 'Custom::GithubRepositorySecret',
+      resourceType: 'Custom::GitHubRepositorySecret',
       properties: githubRepositorySecretEventProps,
     });
   }

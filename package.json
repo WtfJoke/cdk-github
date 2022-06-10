@@ -8,7 +8,7 @@
   "scripts": {
     "build": "npx projen build",
     "bump": "npx projen bump",
-    "cdk:githubreposecret:deploy": "npx projen cdk:githubreposecret:deploy",
+    "cdk:actionsecret:deploy": "npx projen cdk:actionsecret:deploy",
     "clobber": "npx projen clobber",
     "compat": "npx projen compat",
     "compile": "npx projen compile",

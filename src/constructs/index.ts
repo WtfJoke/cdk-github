@@ -1,1 +1,1 @@
-export * from './github-repository-secret';
+export * from './action-secret';

@@ -2,8 +2,8 @@ import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-sec
 import { mockClient } from 'aws-sdk-client-mock';
 
 import nock from 'nock';
-import { handler } from '../src/handler/github-repository-secret/github-repository-secret-handler';
-import { GitHubRepositorySecretEventProps, OnEventRequest } from '../src/types';
+import { handler } from '../src/handler/action-secrets/action-secret-handler';
+import { ActionSecretEventProps, OnEventRequest } from '../src/types';
 
 describe('github-repository-secret-handler', () => {
 
@@ -12,7 +12,7 @@ describe('github-repository-secret-handler', () => {
   const githubTokenSecret = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:github-token-secret';
   const sourceSecretArn = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:secret-id';
 
-  const baseEvent: OnEventRequest<GitHubRepositorySecretEventProps> = {
+  const baseEvent: OnEventRequest<ActionSecretEventProps> = {
     ResourceProperties: {
       repositoryOwner: 'WtfJoke',
       repositoryName: 'cdk-github',
@@ -37,7 +37,7 @@ describe('github-repository-secret-handler', () => {
 
   describe('onCreate', () => {
 
-    const event: OnEventRequest<GitHubRepositorySecretEventProps> = {
+    const event: OnEventRequest<ActionSecretEventProps> = {
       ...baseEvent,
       RequestType: 'Create',
     };
@@ -109,7 +109,7 @@ describe('github-repository-secret-handler', () => {
 
   describe('onUpdate', () => {
 
-    const event: OnEventRequest<GitHubRepositorySecretEventProps> = {
+    const event: OnEventRequest<ActionSecretEventProps> = {
       ...baseEvent,
       RequestType: 'Update',
     };
@@ -181,7 +181,7 @@ describe('github-repository-secret-handler', () => {
 
   describe('onDelete', () => {
 
-    const event: OnEventRequest<GitHubRepositorySecretEventProps> = {
+    const event: OnEventRequest<ActionSecretEventProps> = {
       ...baseEvent,
       RequestType: 'Delete',
     };

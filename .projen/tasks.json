@@ -41,11 +41,11 @@
       ],
       "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
     },
-    "cdk:githubreposecret:deploy": {
-      "name": "cdk:githubreposecret:deploy",
+    "cdk:actionsecret:deploy": {
+      "name": "cdk:actionsecret:deploy",
       "steps": [
         {
-          "exec": "npx cdk deploy --app \"npx ts-node --prefer-ts-exts src/examples/github-repository-secret/github-repository-secret-app.ts\""
+          "exec": "npx cdk deploy --app \"npx ts-node --prefer-ts-exts src/examples/action-secret/action-secret-app.ts\""
         }
       ]
     },

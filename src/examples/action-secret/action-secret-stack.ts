@@ -1,20 +1,20 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
-import { GitHubRepositorySecret } from '../../constructs';
+import { ActionSecret } from '../../constructs';
 
-export class GitHubRepositorySecretStack extends Stack {
+export class ActionSecretStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const sourceSecret = Secret.fromSecretNameV2(this, 'secretToStoreInGithub', 'testcdkgithub');
+    const sourceSecret = Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', 'testcdkgithub');
     const githubTokenSecret = Secret.fromSecretNameV2(this, 'ghSecret', 'GITHUB_TOKEN');
 
-    new GitHubRepositorySecret(this, 'GithubSecret', {
+    new ActionSecret(this, 'GitHubActionSecret', {
       githubTokenSecret,
       repositoryName: 'cdk-github',
       repositoryOwner: 'wtfjoke',
-      repositorySecretName: 'aRandomGithubSecret',
+      repositorySecretName: 'aRandomGitHubSecret',
       sourceSecret,
     });
   }
