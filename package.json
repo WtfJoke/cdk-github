@@ -8,6 +8,7 @@
   "scripts": {
     "build": "npx projen build",
     "bump": "npx projen bump",
+    "cdk:actionenvironmentsecret:deploy": "npx projen cdk:actionenvironmentsecret:deploy",
     "cdk:actionsecret:deploy": "npx projen cdk:actionsecret:deploy",
     "clobber": "npx projen clobber",
     "compat": "npx projen compat",
@@ -82,11 +83,14 @@
     "libsodium-wrappers"
   ],
   "keywords": [
-    "cdk"
+    "aws",
+    "cdk",
+    "constructs",
+    "github"
   ],
   "main": "lib/index.js",
   "license": "MIT",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "jest": {
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts?(x)",
