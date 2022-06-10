@@ -1,1 +1,1 @@
-export * from './constructs/action-secret';
+export * from './constructs';

@@ -41,6 +41,14 @@
       ],
       "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
     },
+    "cdk:actionenvironmentsecret:deploy": {
+      "name": "cdk:actionenvironmentsecret:deploy",
+      "steps": [
+        {
+          "exec": "npx cdk deploy --app \"npx ts-node --prefer-ts-exts src/examples/action-environment-secret/action-environment-secret-app.ts\""
+        }
+      ]
+    },
     "cdk:actionsecret:deploy": {
       "name": "cdk:actionsecret:deploy",
       "steps": [

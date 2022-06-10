@@ -6,9 +6,9 @@ import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
-import { ActionSecretEventProps } from '../types';
+import { ActionEnvironmentSecretEventProps } from '../types';
 
-export interface ActionSecretProps {
+export interface ActionEnvironmentSecretProps {
   /**
    * The AWS secret in which the OAuth GitHub (personal) access token is stored
    */
@@ -30,22 +30,27 @@ export interface ActionSecretProps {
   readonly repositorySecretName: string;
 
   /**
+   * The GithHub environment which the secret should be stored in
+   */
+  readonly environment: string;
+
+  /**
    * The AWS secret which should be stored as a GitHub as a secret
    */
   readonly sourceSecret: ISecret;
 }
 
-export class ActionSecret extends Construct {
-  constructor(scope: Construct, id: string, props: ActionSecretProps) {
+export class ActionEnvironmentSecret extends Construct {
+  constructor(scope: Construct, id: string, props: ActionEnvironmentSecretProps) {
     super(scope, id);
-    const { githubTokenSecret, repositorySecretName, repositoryName, repositoryOwner, sourceSecret } = props;
+    const { githubTokenSecret, repositorySecretName, repositoryName, repositoryOwner, sourceSecret, environment } = props;
     const awsRegion = Stack.of(this).region;
 
     const handler = new NodejsFunction(this, 'CustomResourceHandler', {
-      functionName: 'GitHubActionSecretCustomResourceHandler',
-      description: 'Handles the creation/deletion of a GitHub Action (repository) secret - created by cdk-github',
+      functionName: 'GitHubActionEnvironmentSecretCustomResourceHandler',
+      description: 'Handles the creation/deletion of a GitHub Action environment secret - created by cdk-github',
       runtime: Runtime.NODEJS_16_X,
-      entry: path.join(__dirname, '..', 'handler', 'action-secrets', 'action-secret-handler.ts'),
+      entry: path.join(__dirname, '..', 'handler', 'action-environment-secrets', 'action-environment-secret-handler.ts'),
       architecture: Architecture.ARM_64,
       timeout: Duration.minutes(10),
     });
@@ -53,12 +58,13 @@ export class ActionSecret extends Construct {
     githubTokenSecret.grantRead(handler);
     sourceSecret.grantRead(handler);
 
-    const provider = new Provider(this, 'SecretProvider', {
+    const provider = new Provider(this, 'CustomResourceProvider', {
       onEventHandler: handler,
       logRetention: RetentionDays.ONE_WEEK,
     });
 
-    const githubRepositorySecretEventProps: ActionSecretEventProps = {
+    const githubRepositorySecretEventProps: ActionEnvironmentSecretEventProps = {
+      environment,
       githubTokenSecret: githubTokenSecret.secretArn,
       repositoryOwner,
       repositoryName,
@@ -69,7 +75,7 @@ export class ActionSecret extends Construct {
 
     new CustomResource(this, 'CustomResource', {
       serviceToken: provider.serviceToken,
-      resourceType: 'Custom::GitHubActionSecret',
+      resourceType: 'Custom::GitHubActionEnvironmentSecret',
       properties: githubRepositorySecretEventProps,
     });
   }
