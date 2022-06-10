@@ -5,7 +5,7 @@ import nock from 'nock';
 import { handler } from '../src/handler/action-secrets/action-secret-handler';
 import { ActionSecretEventProps, OnEventRequest } from '../src/types';
 
-describe('github-repository-secret-handler', () => {
+describe('action-secret-handler', () => {
 
   const smMock = mockClient(SecretsManagerClient);
   const consoleLogSpy = jest.spyOn(console, 'log');
