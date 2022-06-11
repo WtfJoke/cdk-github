@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import * as path from 'path';
 import { CustomResource, Duration, Stack } from 'aws-cdk-lib';
 import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda';
@@ -45,12 +46,16 @@ export class ActionEnvironmentSecret extends Construct {
     super(scope, id);
     const { githubTokenSecret, repositorySecretName, repositoryName, repositoryOwner, sourceSecret, environment } = props;
     const awsRegion = Stack.of(this).region;
+    const codeBasePath = path.join(__dirname, '..', 'handler', 'action-environment-secrets');
+    const handlerFileName = 'action-environment-secret-handler';
+    // When installed as a package, there are no .ts files in the node modules folder
+    const extension = fs.existsSync(path.join(codeBasePath, `${handlerFileName}.js`)) ? '.js' : '.ts';
 
     const handler = new NodejsFunction(this, 'CustomResourceHandler', {
       functionName: 'GitHubActionEnvironmentSecretCustomResourceHandler',
       description: 'Handles the creation/deletion of a GitHub Action environment secret - created by cdk-github',
       runtime: Runtime.NODEJS_16_X,
-      entry: path.join(__dirname, '..', 'handler', 'action-environment-secrets', 'action-environment-secret-handler.ts'),
+      entry: path.join(codeBasePath, handlerFileName + extension),
       architecture: Architecture.ARM_64,
       timeout: Duration.minutes(10),
     });
