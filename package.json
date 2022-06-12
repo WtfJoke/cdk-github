@@ -139,7 +139,7 @@
     "targets": {
       "python": {
         "distName": "cdk-github",
-        "module": "cdk-github"
+        "module": "cdkgithub"
       }
     },
     "tsc": {

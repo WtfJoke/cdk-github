@@ -23,7 +23,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   },
   publishToPypi: {
     distName: 'cdk-github',
-    module: 'cdk-github',
+    module: 'cdkgithub',
   },
   codeCov: true,
 });
