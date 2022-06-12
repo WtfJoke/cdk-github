@@ -10,16 +10,16 @@ export interface ActionSecretHandlerFunctionProps extends lambda.FunctionOptions
 }
 
 /**
- * An AWS Lambda function which executes src/handler/action-secrets/action-secret-handler.
+ * An AWS Lambda function which executes src/handler/secrets/action-secrets/action-secret-handler.
  */
 export class ActionSecretHandlerFunction extends lambda.Function {
   constructor(scope: Construct, id: string, props?: ActionSecretHandlerFunctionProps) {
     super(scope, id, {
-      description: 'src/handler/action-secrets/action-secret-handler.lambda.ts',
+      description: 'src/handler/secrets/action-secrets/action-secret-handler.lambda.ts',
       ...props,
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: 'index.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, '../../../assets/handler/action-secrets/action-secret-handler.lambda')),
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../../../assets/handler/secrets/action-secrets/action-secret-handler.lambda')),
     });
     this.addEnvironment('AWS_NODEJS_CONNECTION_REUSE_ENABLED', '1', { removeInEdge: true });
   }

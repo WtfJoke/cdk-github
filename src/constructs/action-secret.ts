@@ -4,7 +4,7 @@ import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
-import { ActionSecretHandlerFunction } from '../handler/action-secrets';
+import { ActionSecretHandlerFunction } from '../handler/secrets/action-secrets';
 import { ActionSecretEventProps } from '../types';
 
 export interface ActionSecretProps {

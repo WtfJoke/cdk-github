@@ -4,3 +4,5 @@ end_of_line = lf
 charset = utf-8
 [*.ts]
 insert_final_newline = true
+indent_style = space
+indent_size = 2

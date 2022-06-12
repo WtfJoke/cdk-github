@@ -146,8 +146,8 @@
         "devDependencies": [
           "**/test/**",
           "**/build-tools/**",
-          "src/handler/action-environment-secrets/action-environment-secret-handler.lambda.ts",
-          "src/handler/action-secrets/action-secret-handler.lambda.ts"
+          "src/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda.ts",
+          "src/handler/secrets/action-secrets/action-secret-handler.lambda.ts"
         ],
         "optionalDependencies": false,
         "peerDependencies": true

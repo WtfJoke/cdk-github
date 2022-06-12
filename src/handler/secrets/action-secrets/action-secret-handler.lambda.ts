@@ -1,11 +1,13 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 import { Octokit } from '@octokit/core';
-import type { OnEventRequest, ActionSecretEventProps } from '../../types';
+import type { OnEventRequest, ActionSecretEventProps } from '../../../types';
 
-import { encryptValue } from './github-secret-encryptor';
+import { encryptValue } from '../github-secret-encryptor';
+import { validateSecretName } from '../github-secret-name-validator';
 
 const onEvent = async (event: OnEventRequest<ActionSecretEventProps>) => {
   console.log(`Event: ${JSON.stringify(event)}`);
+  validateSecretName(event.ResourceProperties.repositorySecretName);
   const smClient = new SecretsManagerClient({ region: event.ResourceProperties.awsRegion });
   const githubTokenSecret = await smClient.send(new GetSecretValueCommand({ SecretId: event.ResourceProperties.githubTokenSecret }));
   const octokit = new Octokit({ auth: githubTokenSecret.SecretString });
@@ -29,11 +31,11 @@ const onCreate = async (
   smClient: SecretsManagerClient,
 ) => {
   const props = event.ResourceProperties;
-  const physicalId = event.PhysicalResourceId;
-  console.log('Create new resource with props ' + JSON.stringify(props));
+  const secretName = props.repositorySecretName;
+  console.log('Create new ActionSecret with props ' + JSON.stringify(props));
 
   await createOrUpdateRepoSecret(event, octokit, smClient);
-  return { PhysicalResourceId: physicalId };
+  return { PhysicalResourceId: secretName };
 };
 
 const onUpdate = async (
@@ -42,21 +44,21 @@ const onUpdate = async (
   smClient: SecretsManagerClient,
 ) => {
   const props = event.ResourceProperties;
-  const physicalId = event.PhysicalResourceId;
-  console.log(`Update resource ${physicalId} with props ${JSON.stringify(props)}`);
+  const secretName = props.repositorySecretName;
+  console.log(`Update ActionSecret ${secretName} with props ${JSON.stringify(props)}`);
 
   await createOrUpdateRepoSecret(event, octokit, smClient);
-  return { PhysicalResourceId: physicalId };
+  return { PhysicalResourceId: secretName };
 };
 
 const onDelete = async (
   event: OnEventRequest<ActionSecretEventProps>,
   octokit: Octokit,
 ) => {
-  const physicalId = event.PhysicalResourceId;
-  console.log('Delete resource ' + physicalId);
+  const secretName = event.ResourceProperties.repositorySecretName;
+  console.log('Delete ActionSecret ' + secretName);
   await deleteRepoSecret(event, octokit);
-  return { PhysicalResourceId: physicalId };
+  return { PhysicalResourceId: secretName };
 };
 
 const createOrUpdateRepoSecret = async (

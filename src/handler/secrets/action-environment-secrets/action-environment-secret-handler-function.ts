@@ -10,16 +10,16 @@ export interface ActionEnvironmentSecretHandlerFunctionProps extends lambda.Func
 }
 
 /**
- * An AWS Lambda function which executes src/handler/action-environment-secrets/action-environment-secret-handler.
+ * An AWS Lambda function which executes src/handler/secrets/action-environment-secrets/action-environment-secret-handler.
  */
 export class ActionEnvironmentSecretHandlerFunction extends lambda.Function {
   constructor(scope: Construct, id: string, props?: ActionEnvironmentSecretHandlerFunctionProps) {
     super(scope, id, {
-      description: 'src/handler/action-environment-secrets/action-environment-secret-handler.lambda.ts',
+      description: 'src/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda.ts',
       ...props,
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: 'index.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, '../../../assets/handler/action-environment-secrets/action-environment-secret-handler.lambda')),
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../../../assets/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda')),
     });
     this.addEnvironment('AWS_NODEJS_CONNECTION_REUSE_ENABLED', '1', { removeInEdge: true });
   }

@@ -1,6 +1,6 @@
 [![npm version](https://badge.fury.io/js/cdk-github.svg)](https://badge.fury.io/js/cdk-github)
 [![PyPI version](https://badge.fury.io/py/cdk-github.svg)](https://badge.fury.io/py/cdk-github)
-[![release](https://github.com/wtfjoke/cdk-github/actions/workflows/release.yml/badge.svg)](https://github.com/wtfjoke/cdk-github/actions/workflows/release.yml)
+[![release](https://github.com/wtfjoke/cdk-github/actions/workflows/release.yml/badge.svg)](https://github.com/wtfjoke/cdk-github/actions/workflows/release.yml)  
 ![cdk-constructs: Experimental](https://img.shields.io/badge/cdk--constructs-experimental-important.svg?style=for-the-badge)
 # CDK-GitHub
 
@@ -32,6 +32,7 @@ Currently the constructs only support authentication via a [GitHub Personal Acce
 
 ## ActionSecret
 
+### TypeScript
 ```typescript
 import { ActionSecret } from 'cdk-github';
 
@@ -78,7 +79,6 @@ class ActionSecretStack(Stack):
             source_secret=source_secret,
         )
 ```
-Please note: the module name is `cdkgithub` and not `cdk-github`.
 
 
 ## ActionEnvironmentSecret

@@ -1,11 +1,13 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 import { Octokit } from '@octokit/core';
-import type { OnEventRequest, ActionEnvironmentSecretEventProps } from '../../types';
+import type { OnEventRequest, ActionEnvironmentSecretEventProps } from '../../../types';
 
-import { encryptValue } from '../action-secrets/github-secret-encryptor';
+import { encryptValue } from '../github-secret-encryptor';
+import { validateSecretName } from '../github-secret-name-validator';
 
 const onEvent = async (event: OnEventRequest<ActionEnvironmentSecretEventProps>) => {
   console.log(`Event: ${JSON.stringify(event)}`);
+  validateSecretName(event.ResourceProperties.repositorySecretName);
   const smClient = new SecretsManagerClient({ region: event.ResourceProperties.awsRegion });
   const githubTokenSecret = await smClient.send(new GetSecretValueCommand({ SecretId: event.ResourceProperties.githubTokenSecret }));
   const octokit = new Octokit({ auth: githubTokenSecret.SecretString });
@@ -29,11 +31,11 @@ const onCreate = async (
   smClient: SecretsManagerClient,
 ) => {
   const props = event.ResourceProperties;
-  const physicalId = event.PhysicalResourceId;
-  console.log('Create new resource with props ' + JSON.stringify(props));
+  const secretName = props.repositorySecretName;
+  console.log('Create new ActionEnvironmentSecret with props ' + JSON.stringify(props));
 
   await createOrUpdateEnvironmentSecret(event, octokit, smClient);
-  return { PhysicalResourceId: physicalId };
+  return { PhysicalResourceId: secretName };
 };
 
 const onUpdate = async (
@@ -42,21 +44,21 @@ const onUpdate = async (
   smClient: SecretsManagerClient,
 ) => {
   const props = event.ResourceProperties;
-  const physicalId = event.PhysicalResourceId;
-  console.log(`Update resource ${physicalId} with props ${JSON.stringify(props)}`);
+  const secretName = props.repositorySecretName;
+  console.log(`Update ActionEnvironmentSecret ${secretName} with props ${JSON.stringify(props)}`);
 
   await createOrUpdateEnvironmentSecret(event, octokit, smClient);
-  return { PhysicalResourceId: physicalId };
+  return { PhysicalResourceId: secretName };
 };
 
 const onDelete = async (
   event: OnEventRequest<ActionEnvironmentSecretEventProps>,
   octokit: Octokit,
 ) => {
-  const physicalId = event.PhysicalResourceId;
-  console.log('Delete resource ' + physicalId);
+  const secretName = event.ResourceProperties.repositorySecretName;
+  console.log('Delete ActionEnvironmentSecret ' + secretName);
   await deleteEnvironmentSecret(event, octokit);
-  return { PhysicalResourceId: physicalId };
+  return { PhysicalResourceId: secretName };
 };
 
 const createOrUpdateEnvironmentSecret = async (

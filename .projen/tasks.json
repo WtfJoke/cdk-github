@@ -46,46 +46,46 @@
       "description": "Prepare assets",
       "steps": [
         {
-          "spawn": "bundle:handler/action-environment-secrets/action-environment-secret-handler.lambda"
+          "spawn": "bundle:handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda"
         },
         {
-          "spawn": "bundle:handler/action-secrets/action-secret-handler.lambda"
+          "spawn": "bundle:handler/secrets/action-secrets/action-secret-handler.lambda"
         }
       ]
     },
-    "bundle:handler/action-environment-secrets/action-environment-secret-handler.lambda": {
-      "name": "bundle:handler/action-environment-secrets/action-environment-secret-handler.lambda",
-      "description": "Create a JavaScript bundle from src/handler/action-environment-secrets/action-environment-secret-handler.lambda.ts",
+    "bundle:handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda": {
+      "name": "bundle:handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda",
+      "description": "Create a JavaScript bundle from src/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/handler/action-environment-secrets/action-environment-secret-handler.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/handler/action-environment-secrets/action-environment-secret-handler.lambda/index.js\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda/index.js\" --external:aws-sdk"
         }
       ]
     },
-    "bundle:handler/action-environment-secrets/action-environment-secret-handler.lambda:watch": {
-      "name": "bundle:handler/action-environment-secrets/action-environment-secret-handler.lambda:watch",
-      "description": "Continuously update the JavaScript bundle from src/handler/action-environment-secrets/action-environment-secret-handler.lambda.ts",
+    "bundle:handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda:watch": {
+      "name": "bundle:handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/handler/action-environment-secrets/action-environment-secret-handler.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/handler/action-environment-secrets/action-environment-secret-handler.lambda/index.js\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda/index.js\" --external:aws-sdk --watch"
         }
       ]
     },
-    "bundle:handler/action-secrets/action-secret-handler.lambda": {
-      "name": "bundle:handler/action-secrets/action-secret-handler.lambda",
-      "description": "Create a JavaScript bundle from src/handler/action-secrets/action-secret-handler.lambda.ts",
+    "bundle:handler/secrets/action-secrets/action-secret-handler.lambda": {
+      "name": "bundle:handler/secrets/action-secrets/action-secret-handler.lambda",
+      "description": "Create a JavaScript bundle from src/handler/secrets/action-secrets/action-secret-handler.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/handler/action-secrets/action-secret-handler.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/handler/action-secrets/action-secret-handler.lambda/index.js\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/handler/secrets/action-secrets/action-secret-handler.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/handler/secrets/action-secrets/action-secret-handler.lambda/index.js\" --external:aws-sdk"
         }
       ]
     },
-    "bundle:handler/action-secrets/action-secret-handler.lambda:watch": {
-      "name": "bundle:handler/action-secrets/action-secret-handler.lambda:watch",
-      "description": "Continuously update the JavaScript bundle from src/handler/action-secrets/action-secret-handler.lambda.ts",
+    "bundle:handler/secrets/action-secrets/action-secret-handler.lambda:watch": {
+      "name": "bundle:handler/secrets/action-secrets/action-secret-handler.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/handler/secrets/action-secrets/action-secret-handler.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/handler/action-secrets/action-secret-handler.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/handler/action-secrets/action-secret-handler.lambda/index.js\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/handler/secrets/action-secrets/action-secret-handler.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/handler/secrets/action-secrets/action-secret-handler.lambda/index.js\" --external:aws-sdk --watch"
         }
       ]
     },

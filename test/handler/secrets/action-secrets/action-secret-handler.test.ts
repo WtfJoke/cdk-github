@@ -2,19 +2,18 @@ import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-sec
 import { mockClient } from 'aws-sdk-client-mock';
 
 import nock from 'nock';
-import { handler } from '../src/handler/action-environment-secrets';
-import { ActionEnvironmentSecretEventProps, OnEventRequest } from '../src/types';
+import { handler } from '../../../../src/handler/secrets/action-secrets';
+import { ActionSecretEventProps, OnEventRequest } from '../../../../src/types';
 
-describe('action-environment-secret-handler', () => {
+describe('action-secret-handler', () => {
 
   const smMock = mockClient(SecretsManagerClient);
   const consoleLogSpy = jest.spyOn(console, 'log');
   const githubTokenSecret = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:github-token-secret';
   const sourceSecretArn = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:secret-id';
 
-  const baseEvent: OnEventRequest<ActionEnvironmentSecretEventProps> = {
+  const baseEvent: OnEventRequest<ActionSecretEventProps> = {
     ResourceProperties: {
-      environment: 'dev',
       repositoryOwner: 'WtfJoke',
       repositoryName: 'cdk-github',
       repositorySecretName: 'secret',
@@ -22,7 +21,7 @@ describe('action-environment-secret-handler', () => {
       awsRegion: 'eu-central-1',
       githubTokenSecret,
     },
-    PhysicalResourceId: 'anId',
+    PhysicalResourceId: 'secret',
     RequestType: 'Create',
     ServiceToken: 'token',
     ResponseURL: '',
@@ -38,7 +37,7 @@ describe('action-environment-secret-handler', () => {
 
   describe('onCreate', () => {
 
-    const event: OnEventRequest<ActionEnvironmentSecretEventProps> = {
+    const event: OnEventRequest<ActionSecretEventProps> = {
       ...baseEvent,
       RequestType: 'Create',
     };
@@ -55,14 +54,12 @@ describe('action-environment-secret-handler', () => {
         SecretString: 'mySecretToStore',
       });
       const ghNock = nock('https://api.github.com')
-        .get('/repos/WtfJoke/cdk-github')
-        .reply(200, { id: '1337' })
         .get('/repos/WtfJoke/cdk-github/actions/secrets/public-key')
         .reply(200, {
           key_id: '568250167242549743',
           key: 'v0dSAu/BswbG2uUYeKnO0aX//Ibts7ItmFRvy6tfP2s=',
         })
-        .put('/repositories/1337/environments/dev/secrets/secret')
+        .put('/repos/WtfJoke/cdk-github/actions/secrets/secret')
         .reply(201);
 
       await handler(event);
@@ -112,7 +109,7 @@ describe('action-environment-secret-handler', () => {
 
   describe('onUpdate', () => {
 
-    const event: OnEventRequest<ActionEnvironmentSecretEventProps> = {
+    const event: OnEventRequest<ActionSecretEventProps> = {
       ...baseEvent,
       RequestType: 'Update',
     };
@@ -129,14 +126,12 @@ describe('action-environment-secret-handler', () => {
         SecretString: 'mySecretToStore',
       });
       const ghNock = nock('https://api.github.com')
-        .get('/repos/WtfJoke/cdk-github')
-        .reply(200, { id: '1337' })
         .get('/repos/WtfJoke/cdk-github/actions/secrets/public-key')
         .reply(200, {
           key_id: '568250167242549743',
           key: 'v0dSAu/BswbG2uUYeKnO0aX//Ibts7ItmFRvy6tfP2s=',
         })
-        .put('/repositories/1337/environments/dev/secrets/secret')
+        .put('/repos/WtfJoke/cdk-github/actions/secrets/secret')
         .reply(201);
 
 
@@ -186,7 +181,7 @@ describe('action-environment-secret-handler', () => {
 
   describe('onDelete', () => {
 
-    const event: OnEventRequest<ActionEnvironmentSecretEventProps> = {
+    const event: OnEventRequest<ActionSecretEventProps> = {
       ...baseEvent,
       RequestType: 'Delete',
     };
@@ -203,15 +198,13 @@ describe('action-environment-secret-handler', () => {
         SecretString: 'mySecretToStore',
       });
       const ghNock = nock('https://api.github.com')
-        .get('/repos/WtfJoke/cdk-github')
-        .reply(200, { id: '1337' })
-        .delete('/repositories/1337/environments/dev/secrets/secret')
+        .delete('/repos/WtfJoke/cdk-github/actions/secrets/secret')
         .reply(204);
 
       await handler(event);
 
       expect(ghNock.isDone()).toBe(true);
-      expect(consoleLogSpy).toHaveBeenCalledWith('Delete resource anId');
+      expect(consoleLogSpy).toHaveBeenCalledWith('Delete ActionSecret secret');
     });
   });
 
