@@ -51,3 +51,6 @@ junit.xml
 .jsii
 tsconfig.json
 !/API.md
+/assets/
+!/src/handler/action-environment-secrets/action-environment-secret-handler-function.ts
+!/src/handler/action-secrets/action-secret-handler-function.ts

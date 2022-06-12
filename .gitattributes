@@ -17,5 +17,7 @@
 /.projen/tasks.json linguist-generated
 /LICENSE linguist-generated
 /package.json linguist-generated
+/src/handler/action-environment-secrets/action-environment-secret-handler-function.ts linguist-generated
+/src/handler/action-secrets/action-secret-handler-function.ts linguist-generated
 /tsconfig.dev.json linguist-generated
 /yarn.lock linguist-generated

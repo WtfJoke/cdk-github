@@ -2,7 +2,7 @@ import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-sec
 import { mockClient } from 'aws-sdk-client-mock';
 
 import nock from 'nock';
-import { handler } from '../src/handler/action-environment-secrets/action-environment-secret-handler';
+import { handler } from '../src/handler/action-environment-secrets';
 import { ActionEnvironmentSecretEventProps, OnEventRequest } from '../src/types';
 
 describe('action-environment-secret-handler', () => {

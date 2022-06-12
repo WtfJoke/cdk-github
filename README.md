@@ -1,3 +1,7 @@
+[![npm version](https://badge.fury.io/js/cdk-github.svg)](https://badge.fury.io/js/cdk-github)
+[![PyPI version](https://badge.fury.io/py/cdk-github.svg)](https://badge.fury.io/py/cdk-github)
+[![release](https://github.com/wtfjoke/cdk-github/actions/workflows/release.yml/badge.svg)](https://github.com/wtfjoke/cdk-github/actions/workflows/release.yml)
+![cdk-constructs: Experimental](https://img.shields.io/badge/cdk--constructs-experimental-important.svg?style=for-the-badge)
 # CDK-GitHub
 
 [AWS CDK](https://aws.amazon.com/cdk/) v2 L3 constructs for GitHub.
@@ -11,6 +15,9 @@ Internally [AWS CloudFormation custom resources](https://docs.aws.amazon.com/AWS
 
 JavaScript/TypeScript:  
 `npm install cdk-github`
+
+Python:  
+`pip install cdk-github`
 
 
 # Constructs
@@ -46,6 +53,32 @@ export class ActionSecretStack extends Stack {
 }
 ```
 See full example in [ActionSecretStack](src/examples/action-secret/action-secret-stack.ts)
+
+### Python
+```python
+import cdkgithub
+
+class ActionSecretStack(Stack):
+    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
+        super().__init__(scope, construct_id, **kwargs)
+
+        source_secret = sm.Secret.from_secret_name_v2(
+            self, "secretToStoreInGitHub", "testcdkgithub"
+        )
+        github_token_secret = sm.Secret.from_secret_name_v2(
+            self, "ghSecret", "GITHUB_TOKEN"
+        )
+        cdkgithub.ActionSecret(
+            self,
+            "GitHubActionSecret",
+            github_token_secret=github_token_secret,
+            repository_name="cdk-github",
+            repository_owner="wtfjoke",
+            repository_secret_name="aRandomPythonGitHubSecret",
+            source_secret=source_secret,
+        )
+```
+Please note: the module name is `cdkgithub` and not `cdk-github`.
 
 
 ## ActionEnvironmentSecret
