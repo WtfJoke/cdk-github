@@ -10,7 +10,7 @@ Internally [AWS CloudFormation custom resources](https://docs.aws.amazon.com/AWS
 # Installation
 
 JavaScript/TypeScript:  
-`npm install wtfjoke/cdk-github`
+`npm install cdk-github`
 
 
 # Constructs
