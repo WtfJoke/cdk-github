@@ -4,14 +4,14 @@
 ![cdk-constructs: Experimental](https://img.shields.io/badge/cdk--constructs-experimental-important.svg?style=for-the-badge)
 # CDK-GitHub
 
-[AWS CDK](https://aws.amazon.com/cdk/) v2 L3 constructs for GitHub.
+GitHub Constructs for use in [AWS CDK](https://aws.amazon.com/cdk/) .
 
-This project aims to make GitHub's API accessible through CDK with various helper constructs to create resources in GitHub. 
-The target is to replicate most of the functionality of the [Terraform GitHub Provider](https://registry.terraform.io/providers/integrations/github/latest/docs).
+This project aims to make GitHub's API accessible through CDK with various helper constructs to create resources in GitHub.    
+The target is to replicate most of the functionality of the official [Terraform GitHub Provider](https://registry.terraform.io/providers/integrations/github/latest/docs).
 
-Internally [AWS CloudFormation custom resources](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources.html) will be used to track GitHub resources (such as Secrets).
+Internally [AWS CloudFormation custom resources](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources.html) and [octokit](https://github.com/octokit/core.js) are used to manage GitHub resources (such as Secrets).
 
-# Installation
+# 🔧 Installation
 
 JavaScript/TypeScript:  
 `npm install cdk-github`
@@ -20,20 +20,24 @@ Python:
 `pip install cdk-github`
 
 
-# Constructs
+# 📚 Constructs
 
 This library provides the following constructs:
 - [ActionSecret](API.md#actionsecret-a-nameactionsecret-idcdk-githubactionsecreta) - Creates a [GitHub Action (repository) secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository) from a given AWS Secrets Manager secret.
 - [ActionEnvironmentSecret](API.md#actionenvironmentsecret-a-nameactionenvironmentsecret-idcdk-githubactionenvironmentsecreta) - Creates a [GitHub Action environment secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-an-environment) from a given AWS Secrets Manager secret.
 
-# Authentication
-Currently the constructs only support authentication via a [GitHub Personal Access Token](https://github.com/settings/tokens/new). The token needs to be a stored in a AWS SecretsManager Secret and passed to the construct as parameter.
-# Examples
+# 🔓 Authentication
+Currently the constructs only support authentication via a [GitHub Personal Access Token](https://github.com/settings/tokens/new). The token needs to be a stored in a AWS SecretsManager Secret and passed to the construct as parameter.    
+
+# 👩‍🏫 Examples
+The API documentation and examples in different languages are available on [Construct Hub](https://constructs.dev/packages/cdk-github).   
+All (typescript) examples can be found in the folder [examples](src/examples/).
 
 ## ActionSecret
-
-### TypeScript
 ```typescript
+import { Stack, StackProps } from 'aws-cdk-lib';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
+import { Construct } from 'constructs';
 import { ActionSecret } from 'cdk-github';
 
 export class ActionSecretStack extends Stack {
@@ -53,36 +57,13 @@ export class ActionSecretStack extends Stack {
   }
 }
 ```
-See full example in [ActionSecretStack](src/examples/action-secret/action-secret-stack.ts)
-
-### Python
-```python
-import cdkgithub
-
-class ActionSecretStack(Stack):
-    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
-        super().__init__(scope, construct_id, **kwargs)
-
-        source_secret = sm.Secret.from_secret_name_v2(
-            self, "secretToStoreInGitHub", "testcdkgithub"
-        )
-        github_token_secret = sm.Secret.from_secret_name_v2(
-            self, "ghSecret", "GITHUB_TOKEN"
-        )
-        cdkgithub.ActionSecret(
-            self,
-            "GitHubActionSecret",
-            github_token_secret=github_token_secret,
-            repository_name="cdk-github",
-            repository_owner="wtfjoke",
-            repository_secret_name="aRandomPythonGitHubSecret",
-            source_secret=source_secret,
-        )
-```
 
 
 ## ActionEnvironmentSecret
 ```typescript
+import { Stack, StackProps } from 'aws-cdk-lib';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
+import { Construct } from 'constructs';
 import { ActionEnvironmentSecret } from 'cdk-github';
 
 export class ActionEnvironmentSecretStack extends Stack {
@@ -103,4 +84,3 @@ export class ActionEnvironmentSecretStack extends Stack {
   }
 }
 ```
-See full example in [ActionEnvironmentSecretStack](src/examples/action-environment-secret/action-environment-secret-stack.ts)

@@ -30,12 +30,12 @@ export interface ActionEnvironmentSecretProps {
   readonly repositorySecretName: string;
 
   /**
-   * The GithHub environment which the secret should be stored in
+   * The GithHub environment name which the secret should be stored in
    */
   readonly environment: string;
 
   /**
-   * The AWS secret which should be stored as a GitHub as a secret
+   * This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName)
    */
   readonly sourceSecret: ISecret;
 }

@@ -29,7 +29,7 @@ export interface ActionSecretProps {
   readonly repositorySecretName: string;
 
   /**
-   * The AWS secret which should be stored as a GitHub as a secret
+   * This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName)
    */
   readonly sourceSecret: ISecret;
 }
