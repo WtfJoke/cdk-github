@@ -8,7 +8,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   license: 'MIT',
   repositoryUrl: 'https://github.com/WtfJoke/cdk-github',
   description: "AWS CDK Construct Library to interact with GitHub's API.",
-  keywords: ['cdk', 'github', 'constructs', 'aws'],
+  keywords: ['cdk', 'github', 'constructs', 'aws', 'ci/cd'],
+  stability: 'experimental',
 
   name: 'cdk-github',
   cdkVersion: '2.25.0',
@@ -24,6 +25,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
   publishToPypi: {
     distName: 'cdk-github',
     module: 'cdkgithub',
+  },
+  lambdaOptions: {
+    runtime: awscdk.LambdaRuntime.NODEJS_16_X,
   },
   codeCov: true,
 });
