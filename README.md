@@ -20,6 +20,8 @@ JavaScript/TypeScript:
 Python:  
 `pip install cdk-github`
 
+C#   
+See https://www.nuget.org/packages/CdkGithub
 
 # 📚 Constructs
 
