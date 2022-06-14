@@ -216,12 +216,12 @@ const actionEnvironmentSecretProps: ActionEnvironmentSecretProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.environment">environment</a></code> | <code>string</code> | The GithHub environment which the secret should be stored in. |
+| <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.environment">environment</a></code> | <code>string</code> | The GithHub environment name which the secret should be stored in. |
 | <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.githubTokenSecret">githubTokenSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | The AWS secret in which the OAuth GitHub (personal) access token is stored. |
 | <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.repositoryName">repositoryName</a></code> | <code>string</code> | The GitHub repository name. |
 | <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.repositoryOwner">repositoryOwner</a></code> | <code>string</code> | The GitHub repository owner. |
 | <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.repositorySecretName">repositorySecretName</a></code> | <code>string</code> | The GitHub secret name to be stored. |
-| <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.sourceSecret">sourceSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | The AWS secret which should be stored as a GitHub as a secret. |
+| <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.sourceSecret">sourceSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName). |
 
 ---
 
@@ -233,7 +233,7 @@ public readonly environment: string;
 
 - *Type:* string
 
-The GithHub environment which the secret should be stored in.
+The GithHub environment name which the secret should be stored in.
 
 ---
 
@@ -293,7 +293,7 @@ public readonly sourceSecret: ISecret;
 
 - *Type:* aws-cdk-lib.aws_secretsmanager.ISecret
 
-The AWS secret which should be stored as a GitHub as a secret.
+This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName).
 
 ---
 
@@ -315,7 +315,7 @@ const actionSecretProps: ActionSecretProps = { ... }
 | <code><a href="#cdk-github.ActionSecretProps.property.repositoryName">repositoryName</a></code> | <code>string</code> | The GitHub repository name. |
 | <code><a href="#cdk-github.ActionSecretProps.property.repositoryOwner">repositoryOwner</a></code> | <code>string</code> | The GitHub repository owner. |
 | <code><a href="#cdk-github.ActionSecretProps.property.repositorySecretName">repositorySecretName</a></code> | <code>string</code> | The GitHub secret name to be stored. |
-| <code><a href="#cdk-github.ActionSecretProps.property.sourceSecret">sourceSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | The AWS secret which should be stored as a GitHub as a secret. |
+| <code><a href="#cdk-github.ActionSecretProps.property.sourceSecret">sourceSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName). |
 
 ---
 
@@ -375,7 +375,7 @@ public readonly sourceSecret: ISecret;
 
 - *Type:* aws-cdk-lib.aws_secretsmanager.ISecret
 
-The AWS secret which should be stored as a GitHub as a secret.
+This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName).
 
 ---
 
