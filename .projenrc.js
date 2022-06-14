@@ -33,10 +33,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
     packageId: 'CdkGithub',
     dotNetNamespace: 'WtfJoke.CdkGithub',
   },
-  publishToGo: {
-    moduleName: 'github.com/WtfJoke/cdk-github',
-    githubTokenSecret: 'PROJEN_GITHUB_TOKEN',
-  },
   codeCov: true,
 });
 project.synth();
