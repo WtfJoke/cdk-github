@@ -154,7 +154,7 @@
         "packageId": "CdkGithub"
       },
       "go": {
-        "moduleName": "github.com/WtfJoke/cdkgithub"
+        "moduleName": "github.com/WtfJoke/cdk-github"
       }
     },
     "tsc": {
