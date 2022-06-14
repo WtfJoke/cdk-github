@@ -36,9 +36,7 @@ All (typescript) examples can be found in the folder [examples](src/examples/).
 
 ## ActionSecret
 ```typescript
-import { Stack, StackProps } from 'aws-cdk-lib';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
-import { Construct } from 'constructs';
 import { ActionSecret } from 'cdk-github';
 
 export class ActionSecretStack extends Stack {
@@ -62,9 +60,7 @@ export class ActionSecretStack extends Stack {
 
 ## ActionEnvironmentSecret
 ```typescript
-import { Stack, StackProps } from 'aws-cdk-lib';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
-import { Construct } from 'constructs';
 import { ActionEnvironmentSecret } from 'cdk-github';
 
 export class ActionEnvironmentSecretStack extends Stack {
