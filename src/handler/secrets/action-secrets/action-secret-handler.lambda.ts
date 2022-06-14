@@ -1,6 +1,7 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 import { Octokit } from '@octokit/core';
 import type { OnEventRequest, ActionSecretEventProps } from '../../../types';
+import { getOwner } from '../github-helper';
 
 import { encryptValue } from '../github-secret-encryptor';
 import { validateSecretName } from '../github-secret-name-validator';
@@ -66,7 +67,7 @@ const createOrUpdateRepoSecret = async (
   octokit: Octokit,
   smClient: SecretsManagerClient,
 ) => {
-  const { repositoryOwner: owner, repositoryName: repo, repositorySecretName: secret_name } = event.ResourceProperties;
+  const { repositoryOwner, repositoryName: repo, repositorySecretName: secret_name } = event.ResourceProperties;
   const secretId = event.ResourceProperties.sourceSecretArn;
   const secretToEncrypt = await smClient.send(new GetSecretValueCommand({ SecretId: secretId }));
   console.log(`Encrypt value of secret with id: ${secretId}`);
@@ -76,6 +77,7 @@ const createOrUpdateRepoSecret = async (
     throw new Error('SecretString is empty from secret with id: ' + secretId);
   }
 
+  const owner = await getOwner(octokit, repositoryOwner);
   const { data } = await octokit.request('GET /repos/{owner}/{repo}/actions/secrets/public-key', { owner, repo });
 
   const encryptedSecret = await encryptValue(secretString, data.key);
@@ -96,7 +98,8 @@ const deleteRepoSecret = async (
   event: OnEventRequest<ActionSecretEventProps>,
   octokit: Octokit,
 ) => {
-  const { repositoryOwner: owner, repositoryName: repo, repositorySecretName: secret_name } = event.ResourceProperties;
+  const { repositoryOwner, repositoryName: repo, repositorySecretName: secret_name } = event.ResourceProperties;
+  const owner = await getOwner(octokit, repositoryOwner);
   const deleteSecretResponse = await octokit.request('DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}', {
     owner,
     repo,

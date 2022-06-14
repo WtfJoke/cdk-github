@@ -72,6 +72,45 @@ describe('action-environment-secret-handler', () => {
       expect(consoleLogSpy).toHaveBeenCalledWith('Encrypt value of secret with id: arn:aws:secretsmanager:eu-central-1:123456789012:secret:secret-id');
     });
 
+    it('without owner should create secret with token owner', async () => {
+      const eventWithoutOwner: OnEventRequest<ActionEnvironmentSecretEventProps> = {
+        ...event,
+        ResourceProperties: {
+          ...event.ResourceProperties,
+          repositoryOwner: undefined,
+        },
+      };
+      smMock.on(GetSecretValueCommand, {
+        SecretId: githubTokenSecret,
+      }).resolves({
+        SecretString: 'gitHubToken',
+      });
+      smMock.on(GetSecretValueCommand, {
+        SecretId: sourceSecretArn,
+      }).resolves({
+        SecretString: 'mySecretToStore',
+      });
+      const ghNock = nock('https://api.github.com')
+        .get('/user')
+        .reply(200, { login: 'WtfJoke' })
+        .get('/repos/WtfJoke/cdk-github')
+        .reply(200, { id: '1337' })
+        .get('/repos/WtfJoke/cdk-github/actions/secrets/public-key')
+        .reply(200, {
+          key_id: '568250167242549743',
+          key: 'v0dSAu/BswbG2uUYeKnO0aX//Ibts7ItmFRvy6tfP2s=',
+        })
+        .put('/repositories/1337/environments/dev/secrets/secret')
+        .reply(201);
+
+      await handler(eventWithoutOwner);
+
+      expect(ghNock.isDone()).toBe(true);
+      expect(consoleLogSpy).toHaveBeenCalledWith('Encrypted secret, attempting to create/update github secret');
+      expect(consoleLogSpy).toHaveBeenCalledWith('Encrypt value of secret with id: arn:aws:secretsmanager:eu-central-1:123456789012:secret:secret-id');
+    });
+
+
     it('with invalid secret - should throw error', async () => {
       smMock.on(GetSecretValueCommand, {
         SecretId: githubTokenSecret,

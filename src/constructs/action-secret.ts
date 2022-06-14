@@ -14,14 +14,15 @@ export interface ActionSecretProps {
   readonly githubTokenSecret: ISecret;
 
   /**
-   * The GitHub repository owner
-   */
-  readonly repositoryOwner: string;
-
-  /**
    * The GitHub repository name
    */
   readonly repositoryName: string;
+
+  /**
+   * The GitHub repository owner
+   * @default - user account which owns the token
+   */
+  readonly repositoryOwner?: string;
 
   /**
    * The GitHub secret name to be stored

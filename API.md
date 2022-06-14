@@ -219,9 +219,9 @@ const actionEnvironmentSecretProps: ActionEnvironmentSecretProps = { ... }
 | <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.environment">environment</a></code> | <code>string</code> | The GithHub environment name which the secret should be stored in. |
 | <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.githubTokenSecret">githubTokenSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | The AWS secret in which the OAuth GitHub (personal) access token is stored. |
 | <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.repositoryName">repositoryName</a></code> | <code>string</code> | The GitHub repository name. |
-| <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.repositoryOwner">repositoryOwner</a></code> | <code>string</code> | The GitHub repository owner. |
 | <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.repositorySecretName">repositorySecretName</a></code> | <code>string</code> | The GitHub secret name to be stored. |
 | <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.sourceSecret">sourceSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName). |
+| <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.repositoryOwner">repositoryOwner</a></code> | <code>string</code> | The GitHub repository owner. |
 
 ---
 
@@ -261,18 +261,6 @@ The GitHub repository name.
 
 ---
 
-##### `repositoryOwner`<sup>Required</sup> <a name="repositoryOwner" id="cdk-github.ActionEnvironmentSecretProps.property.repositoryOwner"></a>
-
-```typescript
-public readonly repositoryOwner: string;
-```
-
-- *Type:* string
-
-The GitHub repository owner.
-
----
-
 ##### `repositorySecretName`<sup>Required</sup> <a name="repositorySecretName" id="cdk-github.ActionEnvironmentSecretProps.property.repositorySecretName"></a>
 
 ```typescript
@@ -297,6 +285,19 @@ This AWS secret value will be stored in GitHub as a secret (under the name of re
 
 ---
 
+##### `repositoryOwner`<sup>Optional</sup> <a name="repositoryOwner" id="cdk-github.ActionEnvironmentSecretProps.property.repositoryOwner"></a>
+
+```typescript
+public readonly repositoryOwner: string;
+```
+
+- *Type:* string
+- *Default:* user account which owns the token
+
+The GitHub repository owner.
+
+---
+
 ### ActionSecretProps <a name="ActionSecretProps" id="cdk-github.ActionSecretProps"></a>
 
 #### Initializer <a name="Initializer" id="cdk-github.ActionSecretProps.Initializer"></a>
@@ -313,9 +314,9 @@ const actionSecretProps: ActionSecretProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-github.ActionSecretProps.property.githubTokenSecret">githubTokenSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | The AWS secret in which the OAuth GitHub (personal) access token is stored. |
 | <code><a href="#cdk-github.ActionSecretProps.property.repositoryName">repositoryName</a></code> | <code>string</code> | The GitHub repository name. |
-| <code><a href="#cdk-github.ActionSecretProps.property.repositoryOwner">repositoryOwner</a></code> | <code>string</code> | The GitHub repository owner. |
 | <code><a href="#cdk-github.ActionSecretProps.property.repositorySecretName">repositorySecretName</a></code> | <code>string</code> | The GitHub secret name to be stored. |
 | <code><a href="#cdk-github.ActionSecretProps.property.sourceSecret">sourceSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName). |
+| <code><a href="#cdk-github.ActionSecretProps.property.repositoryOwner">repositoryOwner</a></code> | <code>string</code> | The GitHub repository owner. |
 
 ---
 
@@ -343,18 +344,6 @@ The GitHub repository name.
 
 ---
 
-##### `repositoryOwner`<sup>Required</sup> <a name="repositoryOwner" id="cdk-github.ActionSecretProps.property.repositoryOwner"></a>
-
-```typescript
-public readonly repositoryOwner: string;
-```
-
-- *Type:* string
-
-The GitHub repository owner.
-
----
-
 ##### `repositorySecretName`<sup>Required</sup> <a name="repositorySecretName" id="cdk-github.ActionSecretProps.property.repositorySecretName"></a>
 
 ```typescript
@@ -376,6 +365,19 @@ public readonly sourceSecret: ISecret;
 - *Type:* aws-cdk-lib.aws_secretsmanager.ISecret
 
 This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName).
+
+---
+
+##### `repositoryOwner`<sup>Optional</sup> <a name="repositoryOwner" id="cdk-github.ActionSecretProps.property.repositoryOwner"></a>
+
+```typescript
+public readonly repositoryOwner: string;
+```
+
+- *Type:* string
+- *Default:* user account which owns the token
+
+The GitHub repository owner.
 
 ---
 

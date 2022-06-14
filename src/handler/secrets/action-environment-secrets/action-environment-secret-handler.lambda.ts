@@ -1,6 +1,7 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 import { Octokit } from '@octokit/core';
 import type { OnEventRequest, ActionEnvironmentSecretEventProps } from '../../../types';
+import { getOwner } from '../github-helper';
 
 import { encryptValue } from '../github-secret-encryptor';
 import { validateSecretName } from '../github-secret-name-validator';
@@ -67,7 +68,7 @@ const createOrUpdateEnvironmentSecret = async (
   smClient: SecretsManagerClient,
 ) => {
   const {
-    repositoryOwner: owner,
+    repositoryOwner,
     repositoryName: repo,
     repositorySecretName: secret_name,
     environment: environment_name,
@@ -82,12 +83,13 @@ const createOrUpdateEnvironmentSecret = async (
     throw new Error('SecretString is empty from secret with id: ' + secretId);
   }
 
+  const owner = await getOwner(octokit, repositoryOwner);
   const { data } = await octokit.request('GET /repos/{owner}/{repo}/actions/secrets/public-key', { owner, repo });
 
   const encryptedSecret = await encryptValue(secretString, data.key);
   console.log('Encrypted secret, attempting to create/update github secret');
 
-  const repository_id = await getRepositoryId(event, octokit);
+  const repository_id = await getRepositoryId(event, octokit, owner);
   const secretResponse = await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
     repository_id,
     environment_name,
@@ -104,8 +106,8 @@ const deleteEnvironmentSecret = async (
   event: OnEventRequest<ActionEnvironmentSecretEventProps>,
   octokit: Octokit,
 ) => {
-  const { environment: environment_name, repositorySecretName: secret_name } = event.ResourceProperties;
-  const repository_id = await getRepositoryId(event, octokit);
+  const { environment: environment_name, repositorySecretName: secret_name, repositoryOwner } = event.ResourceProperties;
+  const repository_id = await getRepositoryId(event, octokit, repositoryOwner);
   const deleteSecretResponse = await octokit.request('DELETE /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
     repository_id,
     environment_name,
@@ -118,8 +120,10 @@ const deleteEnvironmentSecret = async (
 const getRepositoryId = async (
   event: OnEventRequest<ActionEnvironmentSecretEventProps>,
   octokit: Octokit,
+  repositoryOwner: string | undefined,
 ) => {
-  const { repositoryOwner: owner, repositoryName: repo } = event.ResourceProperties;
+  const { repositoryName: repo } = event.ResourceProperties;
+  const owner = await getOwner(octokit, repositoryOwner);
   const { data } = await octokit.request('GET /repos/{owner}/{repo}', {
     owner,
     repo,
