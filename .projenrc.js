@@ -22,12 +22,17 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'cdk:actionsecret:deploy': 'npx cdk deploy --app "npx ts-node --prefer-ts-exts src/examples/action-secret/action-secret-app.ts"',
     'cdk:actionenvironmentsecret:deploy': 'npx cdk deploy --app "npx ts-node --prefer-ts-exts src/examples/action-environment-secret/action-environment-secret-app.ts"',
   },
+  lambdaOptions: {
+    runtime: awscdk.LambdaRuntime.NODEJS_16_X,
+  },
   publishToPypi: {
     distName: 'cdk-github',
     module: 'cdkgithub',
   },
-  lambdaOptions: {
-    runtime: awscdk.LambdaRuntime.NODEJS_16_X,
+  publishToNuget: {
+    packageId: 'CdkGithub',
+    dotNetNamespace: 'WtfJoke.CdkGithub',
+  },
   },
   codeCov: true,
 });
