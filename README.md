@@ -84,3 +84,7 @@ export class ActionEnvironmentSecretStack extends Stack {
   }
 }
 ```
+
+# 💖 Contributing
+
+Contributions of all kinds are welcome! Check out our [contributing guide](CONTRIBUTING.md).
