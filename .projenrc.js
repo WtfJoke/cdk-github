@@ -22,6 +22,11 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'cdk:actionsecret:deploy': 'npx cdk deploy --app "npx ts-node --prefer-ts-exts src/examples/action-secret/action-secret-app.ts"',
     'cdk:actionenvironmentsecret:deploy': 'npx cdk deploy --app "npx ts-node --prefer-ts-exts src/examples/action-environment-secret/action-environment-secret-app.ts"',
   },
+  autoApproveUpgrades: true,
+  autoApproveOptions: {
+    allowedUsernames: ['BAutoBot'],
+    secret: 'GO_GITHUB_TOKEN', // needs the same permissions as go publishing
+  },
   lambdaOptions: {
     runtime: awscdk.LambdaRuntime.NODEJS_16_X,
   },
