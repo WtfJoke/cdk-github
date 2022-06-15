@@ -64,12 +64,12 @@
     "jest-junit": "^13",
     "jsii": "^1.60.1",
     "jsii-diff": "^1.60.1",
-    "jsii-docgen": "^7.0.33",
+    "jsii-docgen": "^7.0.34",
     "jsii-pacmak": "^1.60.1",
     "json-schema": "^0.4.0",
-    "nock": "^13.2.6",
+    "nock": "^13.2.7",
     "npm-check-updates": "^12",
-    "projen": "^0.58.11",
+    "projen": "^0.58.13",
     "standard-version": "^9",
     "ts-jest": "^27",
     "typescript": "^4.7.3"
@@ -79,7 +79,7 @@
     "constructs": "^10.0.5"
   },
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.109.0",
+    "@aws-sdk/client-secrets-manager": "^3.110.0",
     "@octokit/core": "^3.6.0",
     "libsodium": "^0.7.10",
     "libsodium-wrappers": "^0.7.10"
