@@ -25,7 +25,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   autoApproveUpgrades: true,
   autoApproveOptions: {
     allowedUsernames: ['BAutoBot'],
-    secret: 'GO_GITHUB_TOKEN', // needs the same permissions as go publishing
+    secret: 'PR_APPROVE_GITHUB_TOKEN',
   },
   lambdaOptions: {
     runtime: awscdk.LambdaRuntime.NODEJS_16_X,
