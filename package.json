@@ -55,7 +55,7 @@
     "aws-cdk-lib": "2.25.0",
     "aws-sdk-client-mock": "^0.6.2",
     "constructs": "10.0.5",
-    "esbuild": "^0.14.45",
+    "esbuild": "^0.14.46",
     "eslint": "^8",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-import-resolver-typescript": "^2.7.1",
