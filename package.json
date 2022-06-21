@@ -46,7 +46,7 @@
     "organization": false
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.100",
+    "@types/aws-lambda": "^8.10.101",
     "@types/jest": "^27.5.2",
     "@types/libsodium-wrappers": "^0.7.9",
     "@types/node": "^14",
@@ -55,7 +55,7 @@
     "aws-cdk-lib": "2.25.0",
     "aws-sdk-client-mock": "^0.6.2",
     "constructs": "10.0.5",
-    "esbuild": "^0.14.46",
+    "esbuild": "^0.14.47",
     "eslint": "^8",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-import-resolver-typescript": "^2.7.1",
