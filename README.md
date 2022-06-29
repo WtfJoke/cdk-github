@@ -52,7 +52,7 @@ export class ActionSecretStack extends Stack {
       githubTokenSecret,
       repositoryName: 'cdk-github',
       repositoryOwner: 'wtfjoke',
-      repositorySecretName: 'aRandomGitHubSecret',
+      repositorySecretName: 'A_RANDOM_GITHUB_SECRET',
       sourceSecret,
     });
   }
@@ -77,7 +77,7 @@ export class ActionEnvironmentSecretStack extends Stack {
       environment: 'dev',
       repositoryName: 'cdk-github',
       repositoryOwner: 'wtfjoke',
-      repositorySecretName: 'aRandomGitHubSecret',
+      repositorySecretName: 'A_RANDOM_GITHUB_SECRET',
       sourceSecret,
     });
   }
