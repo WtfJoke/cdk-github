@@ -62,7 +62,7 @@ describe('action-secret-handler', () => {
         .put('/repos/WtfJoke/cdk-github/actions/secrets/secret')
         .reply(201);
 
-      await handler(event);
+      expect(await handler(event)).toStrictEqual({ PhysicalResourceId: 'secret/WtfJoke/cdk-github' });
 
       expect(ghNock.isDone()).toBe(true);
       expect(consoleLogSpy).toHaveBeenCalledWith('Encrypted secret, attempting to create/update github secret');
@@ -98,7 +98,7 @@ describe('action-secret-handler', () => {
         .put('/repos/WtfJoke/cdk-github/actions/secrets/secret')
         .reply(201);
 
-      await handler(eventWithoutOwner);
+      expect(await handler(eventWithoutOwner)).toStrictEqual({ PhysicalResourceId: 'secret/WtfJoke/cdk-github' });
 
       expect(ghNock.isDone()).toBe(true);
       expect(consoleLogSpy).toHaveBeenCalledWith('Encrypted secret, attempting to create/update github secret');
@@ -171,7 +171,7 @@ describe('action-secret-handler', () => {
         .reply(201);
 
 
-      await handler(event);
+      expect(await handler(event)).toStrictEqual({ PhysicalResourceId: 'secret/WtfJoke/cdk-github' });
 
       expect(ghNock.isDone()).toBe(true);
       expect(consoleLogSpy).toHaveBeenCalledWith('Encrypted secret, attempting to create/update github secret');
@@ -237,7 +237,7 @@ describe('action-secret-handler', () => {
         .delete('/repos/WtfJoke/cdk-github/actions/secrets/secret')
         .reply(204);
 
-      await handler(event);
+      expect(await handler(event)).toStrictEqual({ PhysicalResourceId: 'secret/WtfJoke/cdk-github' });
 
       expect(ghNock.isDone()).toBe(true);
       expect(consoleLogSpy).toHaveBeenCalledWith('Delete ActionSecret secret');

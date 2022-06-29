@@ -1,9 +1,16 @@
 import { Octokit } from '@octokit/core';
 
+let cachedOwner: string | undefined;
+
 export const getOwner = async (octokit: Octokit, owner: string | undefined): Promise<string> => {
   if (owner) {
     return owner;
+  } else if (cachedOwner) {
+    return cachedOwner;
   }
 
-  return octokit.request('GET /user').then(({ data }) => (data.login));
+  const fetchedOwner = await octokit.request('GET /user').then(({ data }) => (data.login));
+  cachedOwner = fetchedOwner;
+  return fetchedOwner;
+
 };

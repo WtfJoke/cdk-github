@@ -32,11 +32,12 @@ const onCreate = async (
   smClient: SecretsManagerClient,
 ) => {
   const props = event.ResourceProperties;
-  const secretName = props.repositorySecretName;
-  console.log('Create new ActionSecret with props ' + JSON.stringify(props));
 
+  console.log('Create new ActionSecret with props ' + JSON.stringify(props));
   await createOrUpdateRepoSecret(event, octokit, smClient);
-  return { PhysicalResourceId: secretName };
+
+  const PhysicalResourceId = await buildPhysicalResourceId(event, octokit);
+  return { PhysicalResourceId };
 };
 
 const onUpdate = async (
@@ -45,21 +46,23 @@ const onUpdate = async (
   smClient: SecretsManagerClient,
 ) => {
   const props = event.ResourceProperties;
-  const secretName = props.repositorySecretName;
-  console.log(`Update ActionSecret ${secretName} with props ${JSON.stringify(props)}`);
 
+  console.log(`Update ActionSecret ${props.repositorySecretName} with props ${JSON.stringify(props)}`);
   await createOrUpdateRepoSecret(event, octokit, smClient);
-  return { PhysicalResourceId: secretName };
+
+  const PhysicalResourceId = await buildPhysicalResourceId(event, octokit);
+  return { PhysicalResourceId };
 };
 
 const onDelete = async (
   event: OnEventRequest<ActionSecretEventProps>,
   octokit: Octokit,
 ) => {
-  const secretName = event.ResourceProperties.repositorySecretName;
-  console.log('Delete ActionSecret ' + secretName);
+  console.log('Delete ActionSecret ' + event.ResourceProperties.repositorySecretName);
   await deleteRepoSecret(event, octokit);
-  return { PhysicalResourceId: secretName };
+
+  const PhysicalResourceId = await buildPhysicalResourceId(event, octokit);
+  return { PhysicalResourceId };
 };
 
 const createOrUpdateRepoSecret = async (
@@ -107,6 +110,12 @@ const deleteRepoSecret = async (
   });
   console.log(`Delete: ${JSON.stringify(deleteSecretResponse)}`);
   return deleteSecretResponse;
+};
+
+const buildPhysicalResourceId = async (event: OnEventRequest<ActionSecretEventProps>, octokit: Octokit) => {
+  const { repositorySecretName: secret, repositoryOwner, repositoryName: repo } = event.ResourceProperties;
+  const owner = await getOwner(octokit, repositoryOwner);
+  return [secret, owner, repo].join('/');
 };
 
 export const handler = onEvent;
