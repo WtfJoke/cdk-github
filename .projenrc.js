@@ -1,4 +1,6 @@
 const { awscdk } = require('projen');
+const { UpgradeDependenciesSchedule } = require('projen/lib/javascript');
+
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'WtfJoke',
   authorName: 'Manuel',
@@ -21,6 +23,11 @@ const project = new awscdk.AwsCdkConstructLibrary({
   scripts: {
     'cdk:actionsecret:deploy': 'npx cdk deploy --app "npx ts-node --prefer-ts-exts src/examples/action-secret/action-secret-app.ts"',
     'cdk:actionenvironmentsecret:deploy': 'npx cdk deploy --app "npx ts-node --prefer-ts-exts src/examples/action-environment-secret/action-environment-secret-app.ts"',
+  },
+  depsUpgradeOptions: {
+    workflowOptions: {
+      schedule: UpgradeDependenciesSchedule.MONTHLY,
+    },
   },
   autoApproveUpgrades: true,
   autoApproveOptions: {
