@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { CustomResource, Duration, Stack } from 'aws-cdk-lib';
 import { Architecture } from 'aws-cdk-lib/aws-lambda';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
@@ -46,9 +47,10 @@ export class ActionEnvironmentSecret extends Construct {
     super(scope, id);
     const { githubTokenSecret, repositorySecretName, repositoryName, repositoryOwner, sourceSecret, environment } = props;
     const awsRegion = Stack.of(this).region;
+    const shortId = randomUUID().slice(0, 8);
 
     const handler = new ActionEnvironmentSecretHandlerFunction(this, 'CustomResourceHandler', {
-      functionName: 'GitHubActionEnvironmentSecretCustomResourceHandler',
+      functionName: 'GitHubActionEnvironmentSecretCustomResourceHandler' + shortId,
       description: 'Handles the creation/deletion of a GitHub Action environment secret - created by cdk-github',
       architecture: Architecture.ARM_64,
       timeout: Duration.minutes(10),
