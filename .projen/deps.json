@@ -33,6 +33,11 @@
       "type": "build"
     },
     {
+      "name": "aws-cdk",
+      "version": "^2",
+      "type": "build"
+    },
+    {
       "name": "aws-sdk-client-mock",
       "type": "build"
     },
@@ -113,6 +118,10 @@
     {
       "name": "ts-jest",
       "version": "^27",
+      "type": "build"
+    },
+    {
+      "name": "ts-node",
       "type": "build"
     },
     {
