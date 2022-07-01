@@ -194,78 +194,6 @@
         }
       ]
     },
-    "integ:action-secrets-app:assert": {
-      "name": "integ:action-secrets-app:assert",
-      "description": "assert the snapshot of integration test 'action-secrets-app'",
-      "steps": [
-        {
-          "exec": "[ -d \"test/constructs/action-secrets-app.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'action-secrets-app'. Run 'projen integ:action-secrets-app:deploy' to capture.\" && exit 1)"
-        },
-        {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/constructs/action-secrets-app.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata -o test/constructs/.tmp/action-secrets-app.integ/assert.cdk.out > /dev/null"
-        },
-        {
-          "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/constructs/action-secrets-app.integ.snapshot/ test/constructs/.tmp/action-secrets-app.integ/assert.cdk.out/"
-        }
-      ]
-    },
-    "integ:action-secrets-app:deploy": {
-      "name": "integ:action-secrets-app:deploy",
-      "description": "deploy integration test 'action-secrets-app' and capture snapshot",
-      "steps": [
-        {
-          "exec": "rm -fr test/constructs/.tmp/action-secrets-app.integ/deploy.cdk.out"
-        },
-        {
-          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/constructs/action-secrets-app.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/constructs/.tmp/action-secrets-app.integ/deploy.cdk.out"
-        },
-        {
-          "exec": "rm -fr test/constructs/action-secrets-app.integ.snapshot"
-        },
-        {
-          "exec": "mv test/constructs/.tmp/action-secrets-app.integ/deploy.cdk.out test/constructs/action-secrets-app.integ.snapshot"
-        },
-        {
-          "spawn": "integ:action-secrets-app:destroy"
-        }
-      ]
-    },
-    "integ:action-secrets-app:destroy": {
-      "name": "integ:action-secrets-app:destroy",
-      "description": "destroy integration test 'action-secrets-app'",
-      "steps": [
-        {
-          "exec": "cdk destroy --app test/constructs/action-secrets-app.integ.snapshot '**' --no-version-reporting"
-        }
-      ]
-    },
-    "integ:action-secrets-app:snapshot": {
-      "name": "integ:action-secrets-app:snapshot",
-      "description": "update snapshot for integration test \"action-secrets-app\"",
-      "steps": [
-        {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/constructs/action-secrets-app.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata -o test/constructs/action-secrets-app.integ.snapshot > /dev/null"
-        }
-      ]
-    },
-    "integ:action-secrets-app:watch": {
-      "name": "integ:action-secrets-app:watch",
-      "description": "watch integration test 'action-secrets-app' (without updating snapshots)",
-      "steps": [
-        {
-          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/constructs/action-secrets-app.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/constructs/.tmp/action-secrets-app.integ/deploy.cdk.out"
-        }
-      ]
-    },
-    "integ:snapshot-all": {
-      "name": "integ:snapshot-all",
-      "description": "update snapshot for all integration tests",
-      "steps": [
-        {
-          "spawn": "integ:action-secrets-app:snapshot"
-        }
-      ]
-    },
     "package": {
       "name": "package",
       "description": "Creates the distribution package",
@@ -396,9 +324,6 @@
         },
         {
           "spawn": "eslint"
-        },
-        {
-          "spawn": "integ:action-secrets-app:assert"
         }
       ]
     },

@@ -1,5 +1,4 @@
-import { randomUUID } from 'crypto';
-import { CustomResource, Duration, Stack } from 'aws-cdk-lib';
+import { CustomResource, Duration, Names, Stack } from 'aws-cdk-lib';
 import { Architecture } from 'aws-cdk-lib/aws-lambda';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
@@ -47,7 +46,7 @@ export class ActionEnvironmentSecret extends Construct {
     super(scope, id);
     const { githubTokenSecret, repositorySecretName, repositoryName, repositoryOwner, sourceSecret, environment } = props;
     const awsRegion = Stack.of(this).region;
-    const shortId = randomUUID().slice(0, 8);
+    const shortId = Names.uniqueId(this).slice(-8);
 
     const handler = new ActionEnvironmentSecretHandlerFunction(this, 'CustomResourceHandler', {
       functionName: 'GitHubActionEnvironmentSecretCustomResourceHandler' + shortId,

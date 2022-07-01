@@ -55,12 +55,3 @@ tsconfig.json
 /assets/
 !/src/handler/secrets/action-environment-secrets/action-environment-secret-handler-function.ts
 !/src/handler/secrets/action-secrets/action-secret-handler-function.ts
-test/constructs/.tmp
-test/constructs/action-secrets-app.integ.snapshot/asset.*
-test/constructs/action-secrets-app.integ.snapshot/**/asset.*
-test/constructs/action-secrets-app.integ.snapshot/cdk.out
-test/constructs/action-secrets-app.integ.snapshot/**/cdk.out
-test/constructs/action-secrets-app.integ.snapshot/manifest.json
-test/constructs/action-secrets-app.integ.snapshot/**/manifest.json
-test/constructs/action-secrets-app.integ.snapshot/tree.json
-test/constructs/action-secrets-app.integ.snapshot/**/tree.json

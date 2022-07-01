@@ -22,5 +22,3 @@ tsconfig.tsbuildinfo
 /.eslintrc.json
 !.jsii
 !/assets/
-test/constructs/.tmp
-test/constructs/action-secrets-app.integ.snapshot
