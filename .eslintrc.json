@@ -146,6 +146,7 @@
         "devDependencies": [
           "**/test/**",
           "**/build-tools/**",
+          "src/handler/github-resource/github-resource-handler.lambda.ts",
           "src/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda.ts",
           "src/handler/secrets/action-secrets/action-secret-handler.lambda.ts"
         ],
