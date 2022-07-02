@@ -3,7 +3,6 @@ export type GitHubResourceEventProps = {
   createRequestEndpoint: string;
   createRequestPayload?: string;
   createRequestResultParameter?: string;
-  createRequestResultValueSSMParameterName?: string;
   updateRequestEndpoint?: string;
   updateRequestPayload?: string;
   deleteRequestEndpoint: string;

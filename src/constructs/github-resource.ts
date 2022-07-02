@@ -2,10 +2,10 @@ import { CustomResource, Duration, Names, Stack } from 'aws-cdk-lib';
 import { Architecture } from 'aws-cdk-lib/aws-lambda';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
-import { IParameter, StringParameter } from 'aws-cdk-lib/aws-ssm';
+import { IParameter } from 'aws-cdk-lib/aws-ssm';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
-import { GithubResourceHandlerFunction, SSMPARAMETERDEFAULTVALUE } from '../handler/github-resource';
+import { GithubResourceHandlerFunction } from '../handler/github-resource';
 import { GitHubResourceEventProps } from '../types';
 
 export interface GitHubResourceProps {
@@ -44,9 +44,8 @@ export interface GitHubResourceProps {
    *
    * Example: `"number"` (for the issue number)
    *
-   * The result value is written in the parameter store under the key `'/cdk-github/github-resource/{stackName}'`.
-   * When this parameter is set, it will be used for the PhyscialResourceId of the CustomResource.
-   *
+   * When this parameter is set and can be extracted from the result, the extracted value will be used for the PhyscialResourceId of the CustomResource.
+   * Changing the parameter once the stack is deployed is not supported.
    */
   readonly createRequestResultParameter?: string;
 
@@ -133,15 +132,7 @@ export class GitHubResource extends Construct {
       timeout: Duration.minutes(10),
     });
 
-
-    const createResultValueParameter = new StringParameter(this, 'CreateParameterResultValue', {
-      parameterName: '/cdk-github/github-resource/' + stack.stackName,
-      stringValue: SSMPARAMETERDEFAULTVALUE,
-    });
-
     githubTokenSecret.grantRead(handler);
-    createResultValueParameter.grantRead(handler);
-    createResultValueParameter.grantWrite(handler);
     writeResponseToSSMParameter?.grantWrite(handler);
 
     const provider = new Provider(this, 'Provider', {
@@ -154,7 +145,6 @@ export class GitHubResource extends Construct {
       createRequestEndpoint,
       createRequestPayload,
       createRequestResultParameter,
-      createRequestResultValueSSMParameterName: createResultValueParameter.parameterName,
       updateRequestEndpoint,
       updateRequestPayload,
       deleteRequestEndpoint,
