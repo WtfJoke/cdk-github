@@ -51,6 +51,7 @@ See https://www.nuget.org/packages/CdkGithub
 This library provides the following constructs:
 - [ActionSecret](API.md#actionsecret-a-nameactionsecret-idcdk-githubactionsecreta) - Creates a [GitHub Action (repository) secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository) from a given AWS Secrets Manager secret.
 - [ActionEnvironmentSecret](API.md#actionenvironmentsecret-a-nameactionenvironmentsecret-idcdk-githubactionenvironmentsecreta) - Creates a [GitHub Action environment secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-an-environment) from a given AWS Secrets Manager secret.
+- [GitHubResource](API.md#githubresource-a-namegithubresource-idcdk-githubgithubresourcea) - Creates an arbitrary GitHub resource. When no suitable construct fits your needs, this construct can be used to create most GitHub resources. It is an L1 construct.
 
 # 🔓 Authentication
 Currently the constructs only support authentication via a [GitHub Personal Access Token](https://github.com/settings/tokens/new). The token needs to be a stored in a AWS SecretsManager Secret and passed to the construct as parameter.    
@@ -102,6 +103,34 @@ export class ActionEnvironmentSecretStack extends Stack {
       repositoryOwner: 'wtfjoke',
       repositorySecretName: 'A_RANDOM_GITHUB_SECRET',
       sourceSecret,
+    });
+  }
+}
+```
+
+## GitHubResource
+```typescript
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
+import { GitHubResource } from 'cdk-github';
+
+
+export class GitHubResourceIssueStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
+    super(scope, id, props);
+
+    const githubTokenSecret = Secret.fromSecretNameV2(this, 'ghSecret', 'GITHUB_TOKEN');
+    // optional
+    const writeResponseToSSMParameter = StringParameter.fromSecureStringParameterAttributes(this, 'responseBody', { parameterName: '/cdk-github/encrypted-response' });
+
+    new GitHubResource(this, 'GitHubIssue', {
+      githubTokenSecret,
+      createRequestEndpoint: 'POST /repos/WtfJoke/dummytest/issues',
+      createRequestPayload: JSON.stringify({ title: 'Testing cdk-github', body: "I'm opening an issue by using aws cdk 🎉", labels: ['bug'] }),
+      createRequestResultParameter: 'number',
+      deleteRequestEndpoint: 'PATCH /repos/WtfJoke/dummytest/issues/:number',
+      deleteRequestPayload: JSON.stringify({ state: 'closed' }),
+      writeResponseToSSMParameter,
     });
   }
 }

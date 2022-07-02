@@ -46,10 +46,31 @@
       "description": "Prepare assets",
       "steps": [
         {
+          "spawn": "bundle:handler/github-resource/github-resource-handler.lambda"
+        },
+        {
           "spawn": "bundle:handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda"
         },
         {
           "spawn": "bundle:handler/secrets/action-secrets/action-secret-handler.lambda"
+        }
+      ]
+    },
+    "bundle:handler/github-resource/github-resource-handler.lambda": {
+      "name": "bundle:handler/github-resource/github-resource-handler.lambda",
+      "description": "Create a JavaScript bundle from src/handler/github-resource/github-resource-handler.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/handler/github-resource/github-resource-handler.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/handler/github-resource/github-resource-handler.lambda/index.js\" --external:aws-sdk"
+        }
+      ]
+    },
+    "bundle:handler/github-resource/github-resource-handler.lambda:watch": {
+      "name": "bundle:handler/github-resource/github-resource-handler.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/handler/github-resource/github-resource-handler.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/handler/github-resource/github-resource-handler.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/handler/github-resource/github-resource-handler.lambda/index.js\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -102,6 +123,14 @@
       "steps": [
         {
           "exec": "npx cdk deploy --app \"npx ts-node --prefer-ts-exts src/examples/action-secret/action-secret-app.ts\""
+        }
+      ]
+    },
+    "cdk:githubresourceissue:deploy": {
+      "name": "cdk:githubresourceissue:deploy",
+      "steps": [
+        {
+          "exec": "npx cdk deploy --app \"npx ts-node --prefer-ts-exts src/examples/github-resource/github-resource-issue-app.ts\""
         }
       ]
     },
