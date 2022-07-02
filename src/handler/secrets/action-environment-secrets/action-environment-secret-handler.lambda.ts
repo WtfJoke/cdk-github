@@ -1,4 +1,4 @@
-import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
+import { SecretsManager } from '@aws-sdk/client-secrets-manager';
 import { Octokit } from '@octokit/core';
 import { CdkCustomResourceResponse } from 'aws-lambda';
 import type { OnEventRequest, ActionEnvironmentSecretEventProps } from '../../../types';
@@ -10,8 +10,8 @@ import { validateSecretName } from '../github-secret-name-validator';
 const onEvent = async (event: OnEventRequest<ActionEnvironmentSecretEventProps>): Promise<CdkCustomResourceResponse> => {
   console.log(`Event: ${JSON.stringify(event)}`);
   validateSecretName(event.ResourceProperties.repositorySecretName);
-  const smClient = new SecretsManagerClient({ region: event.ResourceProperties.awsRegion });
-  const githubTokenSecret = await smClient.send(new GetSecretValueCommand({ SecretId: event.ResourceProperties.githubTokenSecret }));
+  const smClient = new SecretsManager({ region: event.ResourceProperties.awsRegion });
+  const githubTokenSecret = await smClient.getSecretValue({ SecretId: event.ResourceProperties.githubTokenSecret });
   const octokit = new Octokit({ auth: githubTokenSecret.SecretString });
 
   const requestType = event.RequestType;
@@ -30,7 +30,7 @@ const onEvent = async (event: OnEventRequest<ActionEnvironmentSecretEventProps>)
 const onCreate = async (
   event: OnEventRequest<ActionEnvironmentSecretEventProps>,
   octokit: Octokit,
-  smClient: SecretsManagerClient,
+  smClient: SecretsManager,
 ): Promise<CdkCustomResourceResponse> => {
   console.log('Create new ActionEnvironmentSecret with props ' + JSON.stringify(event.ResourceProperties));
   await createOrUpdateEnvironmentSecret(event, octokit, smClient);
@@ -42,7 +42,7 @@ const onCreate = async (
 const onUpdate = async (
   event: OnEventRequest<ActionEnvironmentSecretEventProps>,
   octokit: Octokit,
-  smClient: SecretsManagerClient,
+  smClient: SecretsManager,
 ): Promise<CdkCustomResourceResponse> => {
   const props = event.ResourceProperties;
 
@@ -67,7 +67,7 @@ const onDelete = async (
 const createOrUpdateEnvironmentSecret = async (
   event: OnEventRequest<ActionEnvironmentSecretEventProps>,
   octokit: Octokit,
-  smClient: SecretsManagerClient,
+  smClient: SecretsManager,
 ) => {
   const {
     repositoryOwner,
@@ -77,7 +77,7 @@ const createOrUpdateEnvironmentSecret = async (
     sourceSecretArn: secretId,
   } = event.ResourceProperties;
 
-  const secretToEncrypt = await smClient.send(new GetSecretValueCommand({ SecretId: secretId }));
+  const secretToEncrypt = await smClient.getSecretValue({ SecretId: secretId });
   console.log(`Encrypt value of secret with id: ${secretId}`);
 
   const secretString = secretToEncrypt.SecretString;

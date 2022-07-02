@@ -1,4 +1,4 @@
-import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
+import { SecretsManager, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
 
 import nock from 'nock';
@@ -7,7 +7,7 @@ import { ActionEnvironmentSecretEventProps, OnEventRequest } from '../../../../s
 
 describe('action-environment-secret-handler', () => {
 
-  const smMock = mockClient(SecretsManagerClient);
+  const smMock = mockClient(SecretsManager);
   const consoleLogSpy = jest.spyOn(console, 'log');
   const githubTokenSecret = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:github-token-secret';
   const sourceSecretArn = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:secret-id';
