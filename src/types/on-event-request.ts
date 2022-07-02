@@ -1,5 +1,6 @@
 /**
  * Taken from https://github.com/aws/aws-cdk/blob/master/packages/%40aws-cdk/custom-resources/lib/provider-framework/types.d.ts
+ * Also available in CdkCustomResourceEvent of @types/aws-lambda
  */
 interface OriginalOnEventRequest extends AWSLambda.CloudFormationCustomResourceEventCommon {
   /**

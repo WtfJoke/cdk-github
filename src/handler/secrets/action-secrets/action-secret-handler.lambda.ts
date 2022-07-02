@@ -1,4 +1,4 @@
-import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
+import { SecretsManager } from '@aws-sdk/client-secrets-manager';
 import { Octokit } from '@octokit/core';
 import { CdkCustomResourceResponse } from 'aws-lambda';
 import type { OnEventRequest, ActionSecretEventProps } from '../../../types';
@@ -10,8 +10,8 @@ import { validateSecretName } from '../github-secret-name-validator';
 const onEvent = async (event: OnEventRequest<ActionSecretEventProps>): Promise<CdkCustomResourceResponse> => {
   console.log(`Event: ${JSON.stringify(event)}`);
   validateSecretName(event.ResourceProperties.repositorySecretName);
-  const smClient = new SecretsManagerClient({ region: event.ResourceProperties.awsRegion });
-  const githubTokenSecret = await smClient.send(new GetSecretValueCommand({ SecretId: event.ResourceProperties.githubTokenSecret }));
+  const smClient = new SecretsManager({ region: event.ResourceProperties.awsRegion });
+  const githubTokenSecret = await smClient.getSecretValue({ SecretId: event.ResourceProperties.githubTokenSecret });
   const octokit = new Octokit({ auth: githubTokenSecret.SecretString });
 
   const requestType = event.RequestType;
@@ -30,7 +30,7 @@ const onEvent = async (event: OnEventRequest<ActionSecretEventProps>): Promise<C
 const onCreate = async (
   event: OnEventRequest<ActionSecretEventProps>,
   octokit: Octokit,
-  smClient: SecretsManagerClient,
+  smClient: SecretsManager,
 ): Promise<CdkCustomResourceResponse> => {
   const props = event.ResourceProperties;
 
@@ -44,7 +44,7 @@ const onCreate = async (
 const onUpdate = async (
   event: OnEventRequest<ActionSecretEventProps>,
   octokit: Octokit,
-  smClient: SecretsManagerClient,
+  smClient: SecretsManager,
 ): Promise<CdkCustomResourceResponse> => {
   const props = event.ResourceProperties;
 
@@ -69,11 +69,11 @@ const onDelete = async (
 const createOrUpdateRepoSecret = async (
   event: OnEventRequest<ActionSecretEventProps>,
   octokit: Octokit,
-  smClient: SecretsManagerClient,
+  smClient: SecretsManager,
 ) => {
   const { repositoryOwner, repositoryName: repo, repositorySecretName: secret_name } = event.ResourceProperties;
   const secretId = event.ResourceProperties.sourceSecretArn;
-  const secretToEncrypt = await smClient.send(new GetSecretValueCommand({ SecretId: secretId }));
+  const secretToEncrypt = await smClient.getSecretValue({ SecretId: secretId });
   console.log(`Encrypt value of secret with id: ${secretId}`);
 
   const secretString = secretToEncrypt.SecretString;
