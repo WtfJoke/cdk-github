@@ -19,15 +19,6 @@ describe('GithubResourceTestStack', () => {
       Description: Match.stringLikeRegexp('created by cdk-github'),
     });
   });
-
-  it('Should include ssm parameter', () => {
-    template.hasResourceProperties('AWS::SSM::Parameter', {
-      Name: '/cdk-github/github-resource/GitHubResourceIssueTestStack',
-      Type: 'String',
-      Value: 'UNFILLED',
-    });
-  });
-
   it('Should include github resource', () => {
     template.hasResourceProperties('Custom::GitHubResource', {
       createRequestEndpoint: 'POST /repos/WtfJoke/dummytest/issues',
@@ -35,7 +26,6 @@ describe('GithubResourceTestStack', () => {
       createRequestResultParameter: 'number',
       deleteRequestEndpoint: 'PATCH /repos/WtfJoke/dummytest/issues/:number',
       deleteRequestPayload: '{"state":"closed"}',
-      createRequestResultValueSSMParameterName: Match.anyValue(),
     });
   });
 
@@ -49,7 +39,6 @@ describe('GithubResourceTestStack', () => {
       updateRequestPayload: '{"body":"I\'m editing this issue ;)"}',
       deleteRequestEndpoint: 'PATCH /repos/WtfJoke/dummytest/issues/:number',
       deleteRequestPayload: '{"state":"closed"}',
-      createRequestResultValueSSMParameterName: Match.anyValue(),
     });
   });
 
@@ -81,11 +70,11 @@ class GithubResourceTestStack extends Stack {
       createRequestEndpoint = defaultProps.createRequestEndpoint,
       createRequestPayload = defaultProps.createRequestPayload,
       createRequestResultParameter = defaultProps.createRequestResultParameter,
-      createRequestResultValueSSMParameterName = defaultProps.createRequestResultValueSSMParameterName,
       deleteRequestEndpoint = defaultProps.deleteRequestEndpoint,
       deleteRequestPayload = defaultProps.deleteRequestPayload,
       updateRequestEndpoint,
       updateRequestPayload,
+      responseBodySSMParameterName,
     } = props;
 
     new GitHubResource(this, 'Issue', {
@@ -96,7 +85,7 @@ class GithubResourceTestStack extends Stack {
       deleteRequestPayload,
       updateRequestEndpoint,
       updateRequestPayload,
-      writeResponseToSSMParameter: createRequestResultValueSSMParameterName ? StringParameter.fromStringParameterName(this, 'resultParam', createRequestResultValueSSMParameterName) : undefined,
+      writeResponseToSSMParameter: responseBodySSMParameterName ? StringParameter.fromStringParameterName(this, 'resultParam', responseBodySSMParameterName) : undefined,
       githubTokenSecret: Secret.fromSecretNameV2(this, 'ghSecret', githubTokenSecret),
     });
   }
