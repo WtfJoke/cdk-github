@@ -8,7 +8,7 @@ import { ActionEnvironmentSecretEventProps, OnEventRequest } from '../../../../s
 describe('action-environment-secret-handler', () => {
 
   const smMock = mockClient(SecretsManager);
-  const consoleLogSpy = jest.spyOn(console, 'log');
+  const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
   const githubTokenSecret = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:github-token-secret';
   const sourceSecretArn = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:secret-id';
 
