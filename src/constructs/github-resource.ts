@@ -16,7 +16,7 @@ export interface GitHubResourceProps {
 
 
   /**
-   * The GitHub api endpoint url for creating resources in format: `POST /repos/OWNER/REPO/issues`
+   * The GitHub api endpoint url for creating resources in format: `POST /repos/OWNER/REPO/issues`. This is called when the GitHubResource is created.
    *
    * Example:
    * ```
@@ -51,7 +51,9 @@ export interface GitHubResourceProps {
 
 
   /**
-   * The GitHub api endpoint url to update this resource in format: `POST /repos/OWNER/REPO/issues`
+   * The GitHub api endpoint url to update this resource in format: `POST /repos/OWNER/REPO/issues`. This is called when the GitHubResource is updated.
+   *
+   * In most of the cases you want to either omit this or use the same value as createRequestEndpoint.
    *
    * Example:
    * ```
@@ -79,7 +81,7 @@ export interface GitHubResourceProps {
 
 
   /**
-   * The GitHub api endpoint url to delete this resource in format: `POST /repos/OWNER/REPO/issues`
+   * The GitHub api endpoint url to delete this resource in format: `POST /repos/OWNER/REPO/issues`. This is called when the GitHubResource is deleted/destroyed.
    *
    * Example:
    * ```
