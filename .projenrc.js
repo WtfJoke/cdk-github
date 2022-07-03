@@ -48,6 +48,12 @@ const project = new awscdk.AwsCdkConstructLibrary({
   publishToGo: {
     moduleName: 'github.com/WtfJoke/cdk-github-go',
   },
+  publishToMaven: {
+    mavenGroupId: 'io.github.wtfjoke',
+    javaPackage: 'io.github.wtfjoke.cdk.github',
+    mavenArtifactId: 'cdk-github',
+    mavenEndpoint: 'https://s01.oss.sonatype.org/',
+  },
   codeCov: true,
 });
 project.synth();
