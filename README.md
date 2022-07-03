@@ -1,6 +1,7 @@
 [![npm version](https://badge.fury.io/js/cdk-github.svg)](https://badge.fury.io/js/cdk-github)
 [![PyPI version](https://badge.fury.io/py/cdk-github.svg)](https://badge.fury.io/py/cdk-github)
 [![NuGet version](https://badge.fury.io/nu/cdkgithub.svg)](https://badge.fury.io/nu/cdkgithub)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.wtfjoke/cdk-github/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.wtfjoke/cdk-github/)
 [![release](https://github.com/wtfjoke/cdk-github/actions/workflows/release.yml/badge.svg)](https://github.com/wtfjoke/cdk-github/actions/workflows/release.yml)  
 ![cdk-constructs: Experimental](https://img.shields.io/badge/cdk--constructs-experimental-important.svg?style=for-the-badge)
 # CDK-GitHub
