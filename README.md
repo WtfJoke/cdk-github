@@ -20,6 +20,29 @@ JavaScript/TypeScript:
 Python:  
 `pip install cdk-github`
 
+Java
+<details> 
+  <summary>Maven:</summary>
+
+  ```xml
+<dependency>
+    <groupId>io.github.wtfjoke</groupId>
+    <artifactId>cdk-github</artifactId>
+    <version>VERSION</version>
+</dependency>
+  ```
+</details>
+<details> 
+  <summary>Gradle:</summary>
+
+   `implementation 'io.github.wtfjoke:cdk-github:VERSION'`
+</details>
+<details> 
+  <summary>Gradle (Kotlin):</summary>
+
+   `implementation("io.github.wtfjoke:cdk-github:VERSION")`
+</details>
+
 C#   
 See https://www.nuget.org/packages/CdkGithub
 
