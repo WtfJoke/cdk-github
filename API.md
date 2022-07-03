@@ -516,6 +516,8 @@ public readonly createRequestEndpoint: string;
 
 The GitHub api endpoint url for creating resources in format: `POST /repos/OWNER/REPO/issues`.
 
+This is called when the GitHubResource is created.
+
 Example:
 ```
 const createRequestEndpoint = 'POST /repos/octocat/Hello-World/issues'
@@ -532,6 +534,8 @@ public readonly deleteRequestEndpoint: string;
 - *Type:* string
 
 The GitHub api endpoint url to delete this resource in format: `POST /repos/OWNER/REPO/issues`.
+
+This is called when the GitHubResource is deleted/destroyed.
 
 Example:
 ```
@@ -587,8 +591,8 @@ Used to extract a value from the result of the createRequest(Endpoint) to be use
 
 Example: `"number"` (for the issue number)
 
-The result value is written in the parameter store under the key `'/cdk-github/github-resource/{stackName}'`.
-When this parameter is set, it will be used for the PhyscialResourceId of the CustomResource.
+When this parameter is set and can be extracted from the result, the extracted value will be used for the PhyscialResourceId of the CustomResource.
+Changing the parameter once the stack is deployed is not supported.
 
 ---
 
@@ -620,6 +624,10 @@ public readonly updateRequestEndpoint: string;
 - *Type:* string
 
 The GitHub api endpoint url to update this resource in format: `POST /repos/OWNER/REPO/issues`.
+
+This is called when the GitHubResource is updated.
+
+In most of the cases you want to either omit this or use the same value as createRequestEndpoint.
 
 Example:
 ```
