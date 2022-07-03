@@ -8,7 +8,7 @@ import { GitHubResourceEventProps, OnEventRequest } from '../../../src/types';
 describe('github-resource-handler', () => {
 
   const smMock = mockClient(SecretsManager);
-  const consoleLogSpy = jest.spyOn(console, 'log');
+  const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
   const githubTokenSecret = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:github-token-secret';
 
   const baseEvent: OnEventRequest<GitHubResourceEventProps> = {
