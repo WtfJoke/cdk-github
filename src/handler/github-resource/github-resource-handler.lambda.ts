@@ -57,7 +57,7 @@ const onUpdate = async (
   } = event.ResourceProperties;
   const PhysicalResourceId = event.PhysicalResourceId;
   if (!updateRequestEndpoint) {
-    console.log("No update request endpoint specified, so we'll just ignore the update request");
+    console.log("No update request endpoint specified, so we'll just ignore the update request.");
     return { PhysicalResourceId };
   }
 
