@@ -64,7 +64,7 @@ describe('github-resource-handler', () => {
       };
 
 
-      it('should create secret', async () => {
+      it('should create resource', async () => {
         mockValidGithubToken();
         const ghNock = nock('https://api.github.com')
           .post('/repos/octocat/Hello-World/issues', JSON.parse(event.ResourceProperties.createRequestPayload!))
@@ -92,6 +92,98 @@ describe('github-resource-handler', () => {
         expect(await handler(event)).toStrictEqual({ PhysicalResourceId: '1337' });
 
         expect(consoleLogSpy).toHaveBeenCalledWith("No update request endpoint specified, so we'll just ignore the update request.");
+      });
+    });
+
+
+    describe('onDelete', () => {
+
+      const event: OnEventRequest<GitHubResourceEventProps> = {
+        ...baseEvent,
+        RequestType: 'Delete',
+        PhysicalResourceId: '1337',
+      };
+
+      it('should delete the resource', async () => {
+        mockValidGithubToken();
+        const ghNock = nock('https://api.github.com')
+          .patch('/repos/octocat/Hello-World/issues/1337', JSON.parse(event.ResourceProperties.deleteRequestPayload!))
+          .reply(200, { ...githubIssueResponse, state: 'closed' });
+
+        expect(await handler(event)).toStrictEqual({ PhysicalResourceId: '1337' });
+
+        ghNock.done();
+        expect(consoleLogSpy).toHaveBeenCalledWith("Making a request to 'PATCH /repos/octocat/Hello-World/issues/1337'.");
+        expect(consoleLogSpy).toHaveBeenCalledWith("Deleted GitHub Resource with id '1337'");
+      });
+
+    });
+  });
+
+  describe('with create, update, delete endpoint and result parameter extraction', () => {
+    const baseEvent: OnEventRequest<GitHubResourceEventProps> = {
+      ResourceProperties: {
+        createRequestEndpoint: 'POST /repos/octocat/Hello-World/issues',
+        createRequestPayload: '{"title": "Test Issue", "body": "This is a test issue"}',
+        createRequestResultParameter: 'number',
+        updateRequestEndpoint: 'PATCH /repos/octocat/Hello-World/issues/:number',
+        updateRequestPayload: '{"title": "Test Issue", "body": "My CR has been updated"}',
+        deleteRequestEndpoint: 'PATCH /repos/octocat/Hello-World/issues/:number',
+        deleteRequestPayload: '{"state": "closed"}',
+        awsRegion: 'eu-central-1',
+        githubTokenSecret,
+      },
+      PhysicalResourceId: 'secret',
+      RequestType: 'Create',
+      ServiceToken: 'token',
+      ResponseURL: '',
+      StackId: 'aStackId',
+      RequestId: 'aRequestId',
+      LogicalResourceId: 'aLogicalResourceId',
+      ResourceType: '',
+    };
+
+
+    describe('onCreate', () => {
+      const event: OnEventRequest<GitHubResourceEventProps> = {
+        ...baseEvent,
+        RequestType: 'Create',
+      };
+
+
+      it('should create resource', async () => {
+        mockValidGithubToken();
+        const ghNock = nock('https://api.github.com')
+          .post('/repos/octocat/Hello-World/issues', JSON.parse(event.ResourceProperties.createRequestPayload!))
+          .reply(201, githubIssueResponse);
+
+        expect(await handler(event)).toStrictEqual({ PhysicalResourceId: '1337' });
+
+        ghNock.done();
+        expect(consoleLogSpy).toHaveBeenCalledWith("Making a request to 'POST /repos/octocat/Hello-World/issues'.");
+        expect(consoleLogSpy).toHaveBeenCalledWith('Created GitHub Resource');
+      });
+    });
+
+
+    describe('onUpdate', () => {
+
+      const event: OnEventRequest<GitHubResourceEventProps> = {
+        ...baseEvent,
+        RequestType: 'Update',
+        PhysicalResourceId: '1337',
+      };
+
+      it('should update resource', async () => {
+        mockValidGithubToken();
+        const ghNock = nock('https://api.github.com')
+          .patch('/repos/octocat/Hello-World/issues/1337', JSON.parse(event.ResourceProperties.updateRequestPayload!))
+          .reply(200, githubIssueResponse);
+        expect(await handler(event)).toStrictEqual({ PhysicalResourceId: '1337' });
+
+        ghNock.isDone();
+        expect(consoleLogSpy).toHaveBeenCalledWith("Making a request to 'PATCH /repos/octocat/Hello-World/issues/1337'.");
+        expect(consoleLogSpy).toHaveBeenCalledWith("Updated GitHub Resource with id '1337'");
       });
     });
 
@@ -148,7 +240,7 @@ describe('github-resource-handler', () => {
       };
 
 
-      it('should create secret', async () => {
+      it('should create resource', async () => {
         mockValidGithubToken();
         const ghNock = nock('https://api.github.com')
           .post('/repos/octocat/Hello-World/issues/1337/assignees', JSON.parse(event.ResourceProperties.createRequestPayload!))
