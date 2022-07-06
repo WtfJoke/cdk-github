@@ -25,6 +25,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'cdk:actionenvironmentsecret:deploy': 'npx cdk deploy --app "npx ts-node --prefer-ts-exts src/examples/action-environment-secret/action-environment-secret-app.ts"',
     'cdk:githubresourceissue:deploy': 'npx cdk deploy --app "npx ts-node --prefer-ts-exts src/examples/github-resource/github-resource-issue-app.ts"',
   },
+  devContainer: true,
   depsUpgradeOptions: {
     workflowOptions: {
       schedule: UpgradeDependenciesSchedule.MONTHLY,

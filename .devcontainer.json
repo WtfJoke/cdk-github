@@ -1,0 +1,8 @@
+{
+  "name": "Dev Container - cdk-github",
+  "image": "jsii/superchain:1-buster-slim-node16",
+  "containerUser": "superchain",
+  "remoteUser": "superchain",
+  "postCreateCommand": "yarn install && yarn build",
+  "extensions": ["dbaeumer.vscode-eslint@2.1.5"]
+}
