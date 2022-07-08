@@ -1,4 +1,4 @@
-const { awscdk } = require('projen');
+const { awscdk, vscode, Task, DevEnvironmentDockerImage } = require('projen');
 const { UpgradeDependenciesSchedule } = require('projen/lib/javascript');
 
 const project = new awscdk.AwsCdkConstructLibrary({
@@ -57,4 +57,11 @@ const project = new awscdk.AwsCdkConstructLibrary({
   },
   codeCov: true,
 });
+
+new vscode.DevContainer(project, {
+  dockerImage: DevEnvironmentDockerImage.fromImage('jsii/superchain:1-buster-slim-node16'),
+  tasks: [new Task('yarn install', { exec: 'yarn install' }), new Task('yarn lint')],
+  vscodeExtensions: ['dbaeumer.vscode-eslint@2.1.5'],
+});
+
 project.synth();
