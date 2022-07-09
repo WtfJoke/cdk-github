@@ -11,6 +11,10 @@ describe('ActionEnvironmentSecretStack', () => {
     template = getTemplate();
   });
 
+  it('Should match snapshot', () => {
+    expect(template).toMatchSnapshot();
+  });
+
   it('Should include custom resource handler', () => {
     template.hasResourceProperties('AWS::Lambda::Function', {
       FunctionName: Match.stringLikeRegexp('GitHubActionEnvironmentSecretCustomResourceHandler'),

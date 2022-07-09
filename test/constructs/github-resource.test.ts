@@ -13,12 +13,17 @@ describe('GithubResourceTestStack', () => {
     template = getTemplate();
   });
 
+  it('Should match snapshot', () => {
+    expect(template).toMatchSnapshot();
+  });
+
   it('Should include custom resource handler', () => {
     template.hasResourceProperties('AWS::Lambda::Function', {
       FunctionName: Match.stringLikeRegexp('GitHubResourceCustomResourceHandler'),
       Description: Match.stringLikeRegexp('created by cdk-github'),
     });
   });
+
   it('Should include github resource', () => {
     template.hasResourceProperties('Custom::GitHubResource', {
       createRequestEndpoint: 'POST /repos/WtfJoke/dummytest/issues',
