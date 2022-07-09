@@ -6,6 +6,7 @@ import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 import { ActionSecretHandlerFunction } from '../handler/secrets/action-secrets';
 import { ActionSecretEventProps } from '../types';
+import { IGitHubRepository } from '../types/exported';
 
 export interface ActionSecretProps {
   /**
@@ -14,15 +15,9 @@ export interface ActionSecretProps {
   readonly githubTokenSecret: ISecret;
 
   /**
-   * The GitHub repository name
+   * The GitHub repository information (owner and name)
    */
-  readonly repositoryName: string;
-
-  /**
-   * The GitHub repository owner
-   * @default - user account which owns the token
-   */
-  readonly repositoryOwner?: string;
+  readonly repository: IGitHubRepository;
 
   /**
    * The GitHub secret name to be stored
@@ -46,7 +41,7 @@ export interface ActionSecretProps {
 export class ActionSecret extends Construct {
   constructor(scope: Construct, id: string, props: ActionSecretProps) {
     super(scope, id);
-    const { githubTokenSecret, repositorySecretName, repositoryName, repositoryOwner, sourceSecret, sourceSecretJsonField } = props;
+    const { githubTokenSecret, repositorySecretName, repository, sourceSecret, sourceSecretJsonField } = props;
     const awsRegion = Stack.of(this).region;
     const shortId = Names.uniqueId(this).slice(-8);
 
@@ -67,8 +62,8 @@ export class ActionSecret extends Construct {
 
     const githubRepositorySecretEventProps: ActionSecretEventProps = {
       githubTokenSecret: githubTokenSecret.secretArn,
-      repositoryOwner,
-      repositoryName,
+      repositoryOwner: repository.owner,
+      repositoryName: repository.name,
       sourceSecretArn: sourceSecret.secretArn,
       sourceSecretJsonField,
       repositorySecretName,

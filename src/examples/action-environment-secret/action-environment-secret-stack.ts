@@ -13,8 +13,7 @@ export class ActionEnvironmentSecretStack extends Stack {
     new ActionEnvironmentSecret(this, 'GitHubActionEnvironmentSecret', {
       githubTokenSecret,
       environment: 'dev',
-      repositoryName: 'cdk-github',
-      repositoryOwner: 'wtfjoke',
+      repository: { name: 'cdk-github', owner: 'wtfjoke' },
       repositorySecretName: 'A_RANDOM_GITHUB_SECRET',
       sourceSecret,
     });

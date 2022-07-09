@@ -69,11 +69,10 @@ class ActionSecretTestStack extends Stack {
     } = props;
 
     new ActionSecret(this, 'ActionSecret', {
-      repositoryName,
-      repositorySecretName,
+      repository: { name: repositoryName, owner: repositoryOwner },
       githubTokenSecret: Secret.fromSecretNameV2(this, 'ghSecret', githubTokenSecretName),
       sourceSecret: Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', sourceSecretName),
-      repositoryOwner,
+      repositorySecretName,
     });
   }
 }

@@ -74,11 +74,10 @@ class ActionEnvironmentSecretTestStack extends Stack {
     } = props;
 
     new ActionEnvironmentSecret(this, 'ActionEnvironmentSecret', {
-      repositoryName,
+      repository: { name: repositoryName, owner: repositoryOwner },
       repositorySecretName,
       githubTokenSecret: Secret.fromSecretNameV2(this, 'ghSecret', githubTokenSecretName),
       sourceSecret: Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', sourceSecretName),
-      repositoryOwner,
       environment,
     });
   }
