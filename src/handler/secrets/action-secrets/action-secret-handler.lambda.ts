@@ -1,7 +1,9 @@
 import { SecretsManager } from '@aws-sdk/client-secrets-manager';
+import { SSM } from '@aws-sdk/client-ssm';
 import { Octokit } from '@octokit/core';
 import { CdkCustomResourceResponse } from 'aws-lambda';
 import type { OnEventRequest, ActionSecretEventProps } from '../../../types';
+import { SecretValue } from '../../helper';
 import { getSecretString } from '../aws-secret-helper';
 import { getOwner } from '../github-helper';
 
@@ -14,6 +16,8 @@ const onEvent = async (event: OnEventRequest<ActionSecretEventProps>): Promise<C
   const smClient = new SecretsManager({ region: event.ResourceProperties.awsRegion });
   const githubTokenSecret = await smClient.getSecretValue({ SecretId: event.ResourceProperties.githubTokenSecret });
   const octokit = new Octokit({ auth: githubTokenSecret.SecretString });
+  const foo = SecretValue.fromUnwrappedValue(event.ResourceProperties.newSourceSecret);
+  console.log('Hi there', + await foo.getValue(smClient, new SSM({ region: event.ResourceProperties.awsRegion })));
 
   const requestType = event.RequestType;
   switch (requestType) {

@@ -1,4 +1,4 @@
-import { Stack, StackProps } from 'aws-cdk-lib';
+import { SecretValue, Stack, StackProps } from 'aws-cdk-lib';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 import { ActionSecret } from '../../constructs';
@@ -16,6 +16,7 @@ export class ActionSecretStack extends Stack {
       repositorySecretName: 'A_RANDOM_GITHUB_SECRET',
       sourceSecret,
       sourceSecretJsonField: 'key',
+      newSourceSecret: SecretValue.secretsManager('cdk-github/test/structured', { jsonField: 'key' }),
     });
   }
 }

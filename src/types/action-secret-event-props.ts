@@ -6,4 +6,5 @@ export type ActionSecretEventProps = {
   sourceSecretArn: string;
   sourceSecretJsonField?: string;
   awsRegion: string;
+  newSourceSecret: string;
 };
