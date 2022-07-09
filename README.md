@@ -75,8 +75,7 @@ export class ActionSecretStack extends Stack {
 
     new ActionSecret(this, 'GitHubActionSecret', {
       githubTokenSecret,
-      repositoryName: 'cdk-github',
-      repositoryOwner: 'wtfjoke',
+      repository: { name: 'cdk-github', owner: 'wtfjoke' },
       repositorySecretName: 'A_RANDOM_GITHUB_SECRET',
       sourceSecret,
     });
