@@ -5,5 +5,6 @@ export type ActionEnvironmentSecretEventProps = {
   repositorySecretName: string;
   repositoryOwner?: string;
   sourceSecretArn: string;
+  sourceSecretJsonField?: string;
   awsRegion: string;
 };

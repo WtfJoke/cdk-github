@@ -39,12 +39,20 @@ export interface ActionEnvironmentSecretProps {
    * This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName)
    */
   readonly sourceSecret: ISecret;
+
+  /**
+   * The key of a JSON field to retrieve in sourceSecret.
+   * This can only be used if the secret stores a JSON object.
+   *
+   * @default - returns all the content stored in the Secrets Manager secret.
+   */
+  readonly sourceSecretJsonField?: string;
 }
 
 export class ActionEnvironmentSecret extends Construct {
   constructor(scope: Construct, id: string, props: ActionEnvironmentSecretProps) {
     super(scope, id);
-    const { githubTokenSecret, repositorySecretName, repositoryName, repositoryOwner, sourceSecret, environment } = props;
+    const { githubTokenSecret, repositorySecretName, repositoryName, repositoryOwner, sourceSecret, sourceSecretJsonField, environment } = props;
     const awsRegion = Stack.of(this).region;
     const shortId = Names.uniqueId(this).slice(-8);
 
@@ -69,6 +77,7 @@ export class ActionEnvironmentSecret extends Construct {
       repositoryOwner,
       repositoryName,
       sourceSecretArn: sourceSecret.secretArn,
+      sourceSecretJsonField,
       repositorySecretName,
       awsRegion,
     };

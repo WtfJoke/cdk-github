@@ -7,7 +7,7 @@ export class ActionSecretStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const sourceSecret = Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', 'testcdkgithub');
+    const sourceSecret = Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', 'cdk-github/test/structured');
     const githubTokenSecret = Secret.fromSecretNameV2(this, 'ghSecret', 'GITHUB_TOKEN');
 
     new ActionSecret(this, 'GitHubActionSecret', {
@@ -16,6 +16,7 @@ export class ActionSecretStack extends Stack {
       repositoryOwner: 'wtfjoke',
       repositorySecretName: 'A_RANDOM_GITHUB_SECRET',
       sourceSecret,
+      sourceSecretJsonField: 'key',
     });
   }
 }

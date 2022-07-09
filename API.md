@@ -321,6 +321,7 @@ const actionEnvironmentSecretProps: ActionEnvironmentSecretProps = { ... }
 | <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.repositorySecretName">repositorySecretName</a></code> | <code>string</code> | The GitHub secret name to be stored. |
 | <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.sourceSecret">sourceSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName). |
 | <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.repositoryOwner">repositoryOwner</a></code> | <code>string</code> | The GitHub repository owner. |
+| <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.sourceSecretJsonField">sourceSecretJsonField</a></code> | <code>string</code> | The key of a JSON field to retrieve in sourceSecret. |
 
 ---
 
@@ -397,6 +398,21 @@ The GitHub repository owner.
 
 ---
 
+##### `sourceSecretJsonField`<sup>Optional</sup> <a name="sourceSecretJsonField" id="cdk-github.ActionEnvironmentSecretProps.property.sourceSecretJsonField"></a>
+
+```typescript
+public readonly sourceSecretJsonField: string;
+```
+
+- *Type:* string
+- *Default:* returns all the content stored in the Secrets Manager secret.
+
+The key of a JSON field to retrieve in sourceSecret.
+
+This can only be used if the secret stores a JSON object.
+
+---
+
 ### ActionSecretProps <a name="ActionSecretProps" id="cdk-github.ActionSecretProps"></a>
 
 #### Initializer <a name="Initializer" id="cdk-github.ActionSecretProps.Initializer"></a>
@@ -416,6 +432,7 @@ const actionSecretProps: ActionSecretProps = { ... }
 | <code><a href="#cdk-github.ActionSecretProps.property.repositorySecretName">repositorySecretName</a></code> | <code>string</code> | The GitHub secret name to be stored. |
 | <code><a href="#cdk-github.ActionSecretProps.property.sourceSecret">sourceSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName). |
 | <code><a href="#cdk-github.ActionSecretProps.property.repositoryOwner">repositoryOwner</a></code> | <code>string</code> | The GitHub repository owner. |
+| <code><a href="#cdk-github.ActionSecretProps.property.sourceSecretJsonField">sourceSecretJsonField</a></code> | <code>string</code> | The key of a JSON field to retrieve in sourceSecret. |
 
 ---
 
@@ -477,6 +494,21 @@ public readonly repositoryOwner: string;
 - *Default:* user account which owns the token
 
 The GitHub repository owner.
+
+---
+
+##### `sourceSecretJsonField`<sup>Optional</sup> <a name="sourceSecretJsonField" id="cdk-github.ActionSecretProps.property.sourceSecretJsonField"></a>
+
+```typescript
+public readonly sourceSecretJsonField: string;
+```
+
+- *Type:* string
+- *Default:* returns all the content stored in the Secrets Manager secret.
+
+The key of a JSON field to retrieve in sourceSecret.
+
+This can only be used if the secret stores a JSON object.
 
 ---
 
