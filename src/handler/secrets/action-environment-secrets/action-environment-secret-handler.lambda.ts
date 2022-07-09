@@ -2,6 +2,7 @@ import { SecretsManager } from '@aws-sdk/client-secrets-manager';
 import { Octokit } from '@octokit/core';
 import { CdkCustomResourceResponse } from 'aws-lambda';
 import type { OnEventRequest, ActionEnvironmentSecretEventProps } from '../../../types';
+import { getSecretString } from '../aws-secret-helper';
 import { getOwner } from '../github-helper';
 
 import { encryptValue } from '../github-secret-encryptor';
@@ -75,16 +76,11 @@ const createOrUpdateEnvironmentSecret = async (
     repositorySecretName: secret_name,
     environment: environment_name,
     sourceSecretArn: secretId,
+    sourceSecretJsonField,
   } = event.ResourceProperties;
-
-  const secretToEncrypt = await smClient.getSecretValue({ SecretId: secretId });
   console.log(`Encrypt value of secret with id: ${secretId}`);
 
-  const secretString = secretToEncrypt.SecretString;
-  if (!secretString) {
-    throw new Error('SecretString is empty from secret with id: ' + secretId);
-  }
-
+  const secretString = await getSecretString(secretId, smClient, sourceSecretJsonField);
   const owner = await getOwner(octokit, repositoryOwner);
   const { data } = await octokit.request('GET /repos/{owner}/{repo}/actions/secrets/public-key', { owner, repo });
 
