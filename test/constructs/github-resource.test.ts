@@ -3,7 +3,7 @@ import { Match, Template } from 'aws-cdk-lib/assertions';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
-import { GitHubResource } from '../../src';
+import { GitHubResource, SecretString } from '../../src';
 import { GitHubResourceEventProps } from '../../src/types';
 
 describe('GithubResourceTestStack', () => {
@@ -91,7 +91,7 @@ class GithubResourceTestStack extends Stack {
       updateRequestEndpoint,
       updateRequestPayload,
       writeResponseToSSMParameter: responseBodySSMParameterName ? StringParameter.fromStringParameterName(this, 'resultParam', responseBodySSMParameterName) : undefined,
-      githubTokenSecret: Secret.fromSecretNameV2(this, 'ghSecret', githubTokenSecret),
+      githubToken: SecretString.fromSecretsManager(Secret.fromSecretNameV2(this, 'ghSecret', githubTokenSecret)),
     });
   }
 }

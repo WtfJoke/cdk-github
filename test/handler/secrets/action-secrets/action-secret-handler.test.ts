@@ -9,15 +9,23 @@ describe('action-secret-handler', () => {
 
   const smMock = mockClient(SecretsManager);
   const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
-  const githubTokenSecret = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:github-token-secret';
-  const sourceSecretArn = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:secret-id';
+  const githubTokenSecretId = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:github-token-secret';
+  const githubTokenSecret = JSON.stringify({
+    type: 'SECRETS_MANAGER',
+    id: githubTokenSecretId,
+  });
+  const sourceSecretId = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:secret-id';
+  const sourceSecret = JSON.stringify({
+    type: 'SECRETS_MANAGER',
+    id: sourceSecretId,
+  });
 
   const baseEvent: OnEventRequest<ActionSecretEventProps> = {
     ResourceProperties: {
       repositoryOwner: 'WtfJoke',
       repositoryName: 'cdk-github',
-      repositorySecretName: 'secret',
-      sourceSecretArn,
+      actionSecretName: 'secret',
+      sourceSecret,
       awsRegion: 'eu-central-1',
       githubTokenSecret,
     },
@@ -44,12 +52,12 @@ describe('action-secret-handler', () => {
 
     it('should create secret', async () => {
       smMock.on(GetSecretValueCommand, {
-        SecretId: githubTokenSecret,
+        SecretId: githubTokenSecretId,
       }).resolves({
         SecretString: 'gitHubToken',
       });
       smMock.on(GetSecretValueCommand, {
-        SecretId: sourceSecretArn,
+        SecretId: sourceSecretId,
       }).resolves({
         SecretString: 'mySecretToStore',
       });
@@ -78,12 +86,12 @@ describe('action-secret-handler', () => {
         },
       };
       smMock.on(GetSecretValueCommand, {
-        SecretId: githubTokenSecret,
+        SecretId: githubTokenSecretId,
       }).resolves({
         SecretString: 'gitHubToken',
       });
       smMock.on(GetSecretValueCommand, {
-        SecretId: sourceSecretArn,
+        SecretId: sourceSecretId,
       }).resolves({
         SecretString: 'mySecretToStore',
       });
@@ -107,12 +115,12 @@ describe('action-secret-handler', () => {
 
     it('with invalid secret - should throw error', async () => {
       smMock.on(GetSecretValueCommand, {
-        SecretId: githubTokenSecret,
+        SecretId: githubTokenSecretId,
       }).resolves({
         SecretString: 'gitHubToken',
       });
       smMock.on(GetSecretValueCommand, {
-        SecretId: sourceSecretArn,
+        SecretId: sourceSecretId,
       }).resolves({
         SecretString: '',
       });
@@ -123,12 +131,12 @@ describe('action-secret-handler', () => {
 
     it('with invalid github token - should throw error', async () => {
       smMock.on(GetSecretValueCommand, {
-        SecretId: githubTokenSecret,
+        SecretId: githubTokenSecretId,
       }).resolves({
         SecretString: 'invalidToken',
       });
       smMock.on(GetSecretValueCommand, {
-        SecretId: sourceSecretArn,
+        SecretId: sourceSecretId,
       }).resolves({
         SecretString: 'mySecretToStore',
       });
@@ -152,12 +160,12 @@ describe('action-secret-handler', () => {
 
     it('should update secret', async () => {
       smMock.on(GetSecretValueCommand, {
-        SecretId: githubTokenSecret,
+        SecretId: githubTokenSecretId,
       }).resolves({
         SecretString: 'gitHubToken',
       });
       smMock.on(GetSecretValueCommand, {
-        SecretId: sourceSecretArn,
+        SecretId: sourceSecretId,
       }).resolves({
         SecretString: 'mySecretToStore',
       });
@@ -180,12 +188,12 @@ describe('action-secret-handler', () => {
 
     it('with invalid secret - should throw error', async () => {
       smMock.on(GetSecretValueCommand, {
-        SecretId: githubTokenSecret,
+        SecretId: githubTokenSecretId,
       }).resolves({
         SecretString: 'gitHubToken',
       });
       smMock.on(GetSecretValueCommand, {
-        SecretId: sourceSecretArn,
+        SecretId: sourceSecretId,
       }).resolves({
         SecretString: '',
       });
@@ -196,12 +204,12 @@ describe('action-secret-handler', () => {
 
     it('with invalid github token - should throw error', async () => {
       smMock.on(GetSecretValueCommand, {
-        SecretId: githubTokenSecret,
+        SecretId: githubTokenSecretId,
       }).resolves({
         SecretString: 'invalidToken',
       });
       smMock.on(GetSecretValueCommand, {
-        SecretId: sourceSecretArn,
+        SecretId: sourceSecretId,
       }).resolves({
         SecretString: 'mySecretToStore',
       });
@@ -224,12 +232,12 @@ describe('action-secret-handler', () => {
 
     it('should delete secret', async () => {
       smMock.on(GetSecretValueCommand, {
-        SecretId: githubTokenSecret,
+        SecretId: githubTokenSecretId,
       }).resolves({
         SecretString: 'gitHubToken',
       });
       smMock.on(GetSecretValueCommand, {
-        SecretId: sourceSecretArn,
+        SecretId: sourceSecretId,
       }).resolves({
         SecretString: 'mySecretToStore',
       });
@@ -246,9 +254,14 @@ describe('action-secret-handler', () => {
 
   it('with invalid RequestType - should throw error', async () => {
     smMock.on(GetSecretValueCommand, {
-      SecretId: githubTokenSecret,
+      SecretId: githubTokenSecretId,
     }).resolves({
       SecretString: 'gitHubToken',
+    });
+    smMock.on(GetSecretValueCommand, {
+      SecretId: sourceSecretId,
+    }).resolves({
+      SecretString: 'mySecretToStore',
     });
     // @ts-ignore
     await expect(handler({ ...baseEvent, RequestType: 'Invalid' })).rejects.toThrowError("Unexpected request type: 'Invalid'");

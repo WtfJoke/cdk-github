@@ -2,7 +2,7 @@ import { App, Stack, StackProps } from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
-import { ActionEnvironmentSecret } from '../../src';
+import { ActionEnvironmentSecret, SecretString } from '../../src';
 
 describe('ActionEnvironmentSecretStack', () => {
   let template: Template;
@@ -25,16 +25,16 @@ describe('ActionEnvironmentSecretStack', () => {
   it('Should include github action environment secret', () => {
     template.hasResourceProperties('Custom::GitHubActionEnvironmentSecret', {
       repositoryName: 'cdk-github',
-      repositorySecretName: 'A_RANDOM_TEST_GITHUB_ENVIRONMENT_SECRET',
+      actionSecretName: 'A_RANDOM_TEST_GITHUB_ENVIRONMENT_SECRET',
       environment: 'dev',
     });
   });
 
   it('Should include github action environment secret with predefined owner', () => {
-    getTemplate({ repositoryOwner: 'octocat', repositoryName: 'cdk-octocat', repositorySecretName: 'MY_SECRET_FISH_SPOT', environment: 'nature' })
+    getTemplate({ repositoryOwner: 'octocat', repositoryName: 'cdk-octocat', actionSecretName: 'MY_SECRET_FISH_SPOT', environment: 'nature' })
       .hasResourceProperties('Custom::GitHubActionEnvironmentSecret', {
         repositoryName: 'cdk-octocat',
-        repositorySecretName: 'MY_SECRET_FISH_SPOT',
+        actionSecretName: 'MY_SECRET_FISH_SPOT',
         repositoryOwner: 'octocat',
         environment: 'nature',
       });
@@ -51,7 +51,7 @@ describe('ActionEnvironmentSecretStack', () => {
 type ActionEnvironmentSecretStackProps = StackProps & {
   repositoryOwner?: string;
   repositoryName?: string;
-  repositorySecretName?: string;
+  actionSecretName?: string;
   githubTokenSecretName?: string;
   sourceSecretName?: string;
   environment?: string;
@@ -59,7 +59,7 @@ type ActionEnvironmentSecretStackProps = StackProps & {
 
 const defaultProps = {
   repositoryName: 'cdk-github',
-  repositorySecretName: 'A_RANDOM_TEST_GITHUB_ENVIRONMENT_SECRET',
+  actionSecretName: 'A_RANDOM_TEST_GITHUB_ENVIRONMENT_SECRET',
   githubTokenSecretName: 'GITHUB_TOKEN',
   sourceSecretName: 'testcdkgithub',
   environment: 'dev',
@@ -70,7 +70,7 @@ class ActionEnvironmentSecretTestStack extends Stack {
     super(scope, id, props);
     const {
       repositoryName = defaultProps.repositoryName,
-      repositorySecretName = defaultProps.repositorySecretName,
+      actionSecretName = defaultProps.actionSecretName,
       githubTokenSecretName = defaultProps.githubTokenSecretName,
       sourceSecretName = defaultProps.sourceSecretName,
       environment = defaultProps.environment,
@@ -79,9 +79,9 @@ class ActionEnvironmentSecretTestStack extends Stack {
 
     new ActionEnvironmentSecret(this, 'ActionEnvironmentSecret', {
       repository: { name: repositoryName, owner: repositoryOwner },
-      repositorySecretName,
-      githubTokenSecret: Secret.fromSecretNameV2(this, 'ghSecret', githubTokenSecretName),
-      sourceSecret: Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', sourceSecretName),
+      actionSecretName,
+      githubToken: SecretString.fromSecretsManager(Secret.fromSecretNameV2(this, 'ghSecret', githubTokenSecretName)),
+      secretToBeStored: SecretString.fromSecretsManager(Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', sourceSecretName)),
       environment,
     });
   }

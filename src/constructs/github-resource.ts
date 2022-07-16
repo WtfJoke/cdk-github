@@ -1,18 +1,18 @@
 import { CustomResource, Duration, Names, Stack } from 'aws-cdk-lib';
 import { Architecture } from 'aws-cdk-lib/aws-lambda';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
-import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { IParameter } from 'aws-cdk-lib/aws-ssm';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 import { GithubResourceHandlerFunction } from '../handler/github-resource';
 import { GitHubResourceEventProps } from '../types';
+import { ISecretString } from '../types/exported';
 
 export interface GitHubResourceProps {
   /**
    * The AWS secret in which the OAuth GitHub (personal) access token is stored
    */
-  readonly githubTokenSecret: ISecret;
+  readonly githubToken: ISecretString;
 
 
   /**
@@ -120,7 +120,7 @@ export class GitHubResource extends Construct {
       createRequestEndpoint, createRequestPayload,
       updateRequestEndpoint, updateRequestPayload,
       deleteRequestEndpoint, deleteRequestPayload,
-      githubTokenSecret, createRequestResultParameter,
+      githubToken, createRequestResultParameter,
       writeResponseToSSMParameter,
     } = props;
     const stack = Stack.of(this);
@@ -134,7 +134,7 @@ export class GitHubResource extends Construct {
       timeout: Duration.minutes(10),
     });
 
-    githubTokenSecret.grantRead(handler);
+    githubToken.grantRead(handler);
     writeResponseToSSMParameter?.grantWrite(handler);
 
     const provider = new Provider(this, 'Provider', {
@@ -143,7 +143,7 @@ export class GitHubResource extends Construct {
     });
 
     const githubResourceEventProps: GitHubResourceEventProps = {
-      githubTokenSecret: githubTokenSecret.secretArn,
+      githubTokenSecret: githubToken.serialize(stack),
       createRequestEndpoint,
       createRequestPayload,
       createRequestResultParameter,

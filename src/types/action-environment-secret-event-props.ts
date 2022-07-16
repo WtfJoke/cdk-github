@@ -2,9 +2,8 @@ export type ActionEnvironmentSecretEventProps = {
   githubTokenSecret: string;
   environment: string;
   repositoryName: string;
-  repositorySecretName: string;
   repositoryOwner?: string;
-  sourceSecretArn: string;
-  sourceSecretJsonField?: string;
+  actionSecretName: string;
+  sourceSecret: string;
   awsRegion: string;
 };

@@ -9,7 +9,11 @@ describe('github-resource-handler', () => {
 
   const smMock = mockClient(SecretsManager);
   const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
-  const githubTokenSecret = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:github-token-secret';
+  const githubTokenSecretId = 'arn:aws:secretsmanager:eu-central-1:123456789012:secret:github-token-secret';
+  const githubTokenSecret = JSON.stringify({
+    type: 'SECRETS_MANAGER',
+    id: githubTokenSecretId,
+  });
   const githubIssueResponse = {
     id: 1,
     node_id: 'MDU6SXNzdWUx',
@@ -297,7 +301,7 @@ describe('github-resource-handler', () => {
 
   const mockValidGithubToken = () => {
     smMock.on(GetSecretValueCommand, {
-      SecretId: githubTokenSecret,
+      SecretId: githubTokenSecretId,
     }).resolves({
       SecretString: 'gitHubToken',
     });

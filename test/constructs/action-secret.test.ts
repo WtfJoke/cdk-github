@@ -2,7 +2,7 @@ import { App, Stack, StackProps } from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
-import { ActionSecret } from '../../src';
+import { ActionSecret, SecretString } from '../../src';
 
 describe('ActionSecretStack', () => {
   let template: Template;
@@ -26,16 +26,16 @@ describe('ActionSecretStack', () => {
   it('Should include github action secret', () => {
     template.hasResourceProperties('Custom::GitHubActionSecret', {
       repositoryName: 'cdk-github',
-      repositorySecretName: 'A_RANDOM_TEST_GITHUB_SECRET',
+      actionSecretName: 'A_RANDOM_TEST_GITHUB_SECRET',
     });
   });
 
   it('Should include github action secret with predefined owner', () => {
-    getTemplate({ repositoryOwner: 'octocat', repositoryName: 'cdk-octocat', repositorySecretName: 'MY_SECRET_FISH_SPOT' })
+    getTemplate({ repositoryOwner: 'octocat', repositoryName: 'cdk-octocat', actionSecretName: 'MY_SECRET_FISH_SPOT' })
       .hasResourceProperties('Custom::GitHubActionSecret', {
         repositoryName: 'cdk-octocat',
-        repositorySecretName: 'MY_SECRET_FISH_SPOT',
         repositoryOwner: 'octocat',
+        actionSecretName: 'MY_SECRET_FISH_SPOT',
       });
   });
 
@@ -50,16 +50,16 @@ describe('ActionSecretStack', () => {
 type ActionSecretStackProps = StackProps & {
   repositoryOwner?: string;
   repositoryName?: string;
-  repositorySecretName?: string;
+  actionSecretName?: string;
   githubTokenSecretName?: string;
-  sourceSecretName?: string;
+  secretNameToBeStored?: string;
 }
 
 const defaultProps = {
   repositoryName: 'cdk-github',
-  repositorySecretName: 'A_RANDOM_TEST_GITHUB_SECRET',
+  actionSecretName: 'A_RANDOM_TEST_GITHUB_SECRET',
   githubTokenSecretName: 'GITHUB_TOKEN',
-  sourceSecretName: 'testcdkgithub',
+  secretNameToBeStored: 'testcdkgithub',
 };
 
 class ActionSecretTestStack extends Stack {
@@ -67,17 +67,17 @@ class ActionSecretTestStack extends Stack {
     super(scope, id, props);
     const {
       repositoryName = defaultProps.repositoryName,
-      repositorySecretName = defaultProps.repositorySecretName,
+      actionSecretName = defaultProps.actionSecretName,
       githubTokenSecretName = defaultProps.githubTokenSecretName,
-      sourceSecretName = defaultProps.sourceSecretName,
+      secretNameToBeStored = defaultProps.secretNameToBeStored,
       repositoryOwner,
     } = props;
 
     new ActionSecret(this, 'ActionSecret', {
       repository: { name: repositoryName, owner: repositoryOwner },
-      githubTokenSecret: Secret.fromSecretNameV2(this, 'ghSecret', githubTokenSecretName),
-      sourceSecret: Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', sourceSecretName),
-      repositorySecretName,
+      githubToken: SecretString.fromSecretsManager(Secret.fromSecretNameV2(this, 'ghSecret', githubTokenSecretName)),
+      secretToBeStored: SecretString.fromSecretsManager(Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', secretNameToBeStored)),
+      actionSecretName,
     });
   }
 }

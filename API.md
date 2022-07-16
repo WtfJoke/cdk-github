@@ -315,12 +315,23 @@ const actionEnvironmentSecretProps: ActionEnvironmentSecretProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.actionSecretName">actionSecretName</a></code> | <code>string</code> | The GitHub secret name to be stored. |
 | <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.environment">environment</a></code> | <code>string</code> | The GithHub environment name which the secret should be stored in. |
-| <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.githubTokenSecret">githubTokenSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | The AWS secret in which the OAuth GitHub (personal) access token is stored. |
+| <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.githubToken">githubToken</a></code> | <code><a href="#cdk-github.ISecretString">ISecretString</a></code> | The AWS secret in which the OAuth GitHub (personal) access token is stored. |
 | <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.repository">repository</a></code> | <code><a href="#cdk-github.IGitHubRepository">IGitHubRepository</a></code> | The GitHub repository information (owner and name). |
-| <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.repositorySecretName">repositorySecretName</a></code> | <code>string</code> | The GitHub secret name to be stored. |
-| <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.sourceSecret">sourceSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName). |
-| <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.sourceSecretJsonField">sourceSecretJsonField</a></code> | <code>string</code> | The key of a JSON field to retrieve in sourceSecret. |
+| <code><a href="#cdk-github.ActionEnvironmentSecretProps.property.secretToBeStored">secretToBeStored</a></code> | <code><a href="#cdk-github.ISecretString">ISecretString</a></code> | This AWS secret value will be stored in GitHub as a secret (under the name of actionSecretName). |
+
+---
+
+##### `actionSecretName`<sup>Required</sup> <a name="actionSecretName" id="cdk-github.ActionEnvironmentSecretProps.property.actionSecretName"></a>
+
+```typescript
+public readonly actionSecretName: string;
+```
+
+- *Type:* string
+
+The GitHub secret name to be stored.
 
 ---
 
@@ -336,13 +347,13 @@ The GithHub environment name which the secret should be stored in.
 
 ---
 
-##### `githubTokenSecret`<sup>Required</sup> <a name="githubTokenSecret" id="cdk-github.ActionEnvironmentSecretProps.property.githubTokenSecret"></a>
+##### `githubToken`<sup>Required</sup> <a name="githubToken" id="cdk-github.ActionEnvironmentSecretProps.property.githubToken"></a>
 
 ```typescript
-public readonly githubTokenSecret: ISecret;
+public readonly githubToken: ISecretString;
 ```
 
-- *Type:* aws-cdk-lib.aws_secretsmanager.ISecret
+- *Type:* <a href="#cdk-github.ISecretString">ISecretString</a>
 
 The AWS secret in which the OAuth GitHub (personal) access token is stored.
 
@@ -360,42 +371,15 @@ The GitHub repository information (owner and name).
 
 ---
 
-##### `repositorySecretName`<sup>Required</sup> <a name="repositorySecretName" id="cdk-github.ActionEnvironmentSecretProps.property.repositorySecretName"></a>
+##### `secretToBeStored`<sup>Required</sup> <a name="secretToBeStored" id="cdk-github.ActionEnvironmentSecretProps.property.secretToBeStored"></a>
 
 ```typescript
-public readonly repositorySecretName: string;
+public readonly secretToBeStored: ISecretString;
 ```
 
-- *Type:* string
+- *Type:* <a href="#cdk-github.ISecretString">ISecretString</a>
 
-The GitHub secret name to be stored.
-
----
-
-##### `sourceSecret`<sup>Required</sup> <a name="sourceSecret" id="cdk-github.ActionEnvironmentSecretProps.property.sourceSecret"></a>
-
-```typescript
-public readonly sourceSecret: ISecret;
-```
-
-- *Type:* aws-cdk-lib.aws_secretsmanager.ISecret
-
-This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName).
-
----
-
-##### `sourceSecretJsonField`<sup>Optional</sup> <a name="sourceSecretJsonField" id="cdk-github.ActionEnvironmentSecretProps.property.sourceSecretJsonField"></a>
-
-```typescript
-public readonly sourceSecretJsonField: string;
-```
-
-- *Type:* string
-- *Default:* returns all the content stored in the Secrets Manager secret.
-
-The key of a JSON field to retrieve in sourceSecret.
-
-This can only be used if the secret stores a JSON object.
+This AWS secret value will be stored in GitHub as a secret (under the name of actionSecretName).
 
 ---
 
@@ -413,21 +397,32 @@ const actionSecretProps: ActionSecretProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-github.ActionSecretProps.property.githubTokenSecret">githubTokenSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | The AWS secret in which the OAuth GitHub (personal) access token is stored. |
+| <code><a href="#cdk-github.ActionSecretProps.property.actionSecretName">actionSecretName</a></code> | <code>string</code> | The GitHub secret name to be stored. |
+| <code><a href="#cdk-github.ActionSecretProps.property.githubToken">githubToken</a></code> | <code><a href="#cdk-github.ISecretString">ISecretString</a></code> | The AWS secret in which the OAuth GitHub (personal) access token is stored. |
 | <code><a href="#cdk-github.ActionSecretProps.property.repository">repository</a></code> | <code><a href="#cdk-github.IGitHubRepository">IGitHubRepository</a></code> | The GitHub repository information (owner and name). |
-| <code><a href="#cdk-github.ActionSecretProps.property.repositorySecretName">repositorySecretName</a></code> | <code>string</code> | The GitHub secret name to be stored. |
-| <code><a href="#cdk-github.ActionSecretProps.property.sourceSecret">sourceSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName). |
-| <code><a href="#cdk-github.ActionSecretProps.property.sourceSecretJsonField">sourceSecretJsonField</a></code> | <code>string</code> | The key of a JSON field to retrieve in sourceSecret. |
+| <code><a href="#cdk-github.ActionSecretProps.property.secretToBeStored">secretToBeStored</a></code> | <code><a href="#cdk-github.ISecretString">ISecretString</a></code> | This AWS secret value will be stored in GitHub as a secret (under the name of actionSecretName). |
 
 ---
 
-##### `githubTokenSecret`<sup>Required</sup> <a name="githubTokenSecret" id="cdk-github.ActionSecretProps.property.githubTokenSecret"></a>
+##### `actionSecretName`<sup>Required</sup> <a name="actionSecretName" id="cdk-github.ActionSecretProps.property.actionSecretName"></a>
 
 ```typescript
-public readonly githubTokenSecret: ISecret;
+public readonly actionSecretName: string;
 ```
 
-- *Type:* aws-cdk-lib.aws_secretsmanager.ISecret
+- *Type:* string
+
+The GitHub secret name to be stored.
+
+---
+
+##### `githubToken`<sup>Required</sup> <a name="githubToken" id="cdk-github.ActionSecretProps.property.githubToken"></a>
+
+```typescript
+public readonly githubToken: ISecretString;
+```
+
+- *Type:* <a href="#cdk-github.ISecretString">ISecretString</a>
 
 The AWS secret in which the OAuth GitHub (personal) access token is stored.
 
@@ -445,42 +440,15 @@ The GitHub repository information (owner and name).
 
 ---
 
-##### `repositorySecretName`<sup>Required</sup> <a name="repositorySecretName" id="cdk-github.ActionSecretProps.property.repositorySecretName"></a>
+##### `secretToBeStored`<sup>Required</sup> <a name="secretToBeStored" id="cdk-github.ActionSecretProps.property.secretToBeStored"></a>
 
 ```typescript
-public readonly repositorySecretName: string;
+public readonly secretToBeStored: ISecretString;
 ```
 
-- *Type:* string
+- *Type:* <a href="#cdk-github.ISecretString">ISecretString</a>
 
-The GitHub secret name to be stored.
-
----
-
-##### `sourceSecret`<sup>Required</sup> <a name="sourceSecret" id="cdk-github.ActionSecretProps.property.sourceSecret"></a>
-
-```typescript
-public readonly sourceSecret: ISecret;
-```
-
-- *Type:* aws-cdk-lib.aws_secretsmanager.ISecret
-
-This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName).
-
----
-
-##### `sourceSecretJsonField`<sup>Optional</sup> <a name="sourceSecretJsonField" id="cdk-github.ActionSecretProps.property.sourceSecretJsonField"></a>
-
-```typescript
-public readonly sourceSecretJsonField: string;
-```
-
-- *Type:* string
-- *Default:* returns all the content stored in the Secrets Manager secret.
-
-The key of a JSON field to retrieve in sourceSecret.
-
-This can only be used if the secret stores a JSON object.
+This AWS secret value will be stored in GitHub as a secret (under the name of actionSecretName).
 
 ---
 
@@ -500,7 +468,7 @@ const gitHubResourceProps: GitHubResourceProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-github.GitHubResourceProps.property.createRequestEndpoint">createRequestEndpoint</a></code> | <code>string</code> | The GitHub api endpoint url for creating resources in format: `POST /repos/OWNER/REPO/issues`. |
 | <code><a href="#cdk-github.GitHubResourceProps.property.deleteRequestEndpoint">deleteRequestEndpoint</a></code> | <code>string</code> | The GitHub api endpoint url to delete this resource in format: `POST /repos/OWNER/REPO/issues`. |
-| <code><a href="#cdk-github.GitHubResourceProps.property.githubTokenSecret">githubTokenSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | The AWS secret in which the OAuth GitHub (personal) access token is stored. |
+| <code><a href="#cdk-github.GitHubResourceProps.property.githubToken">githubToken</a></code> | <code><a href="#cdk-github.ISecretString">ISecretString</a></code> | The AWS secret in which the OAuth GitHub (personal) access token is stored. |
 | <code><a href="#cdk-github.GitHubResourceProps.property.createRequestPayload">createRequestPayload</a></code> | <code>string</code> | The GitHub api request payload for creating resources. This is a JSON parseable string. |
 | <code><a href="#cdk-github.GitHubResourceProps.property.createRequestResultParameter">createRequestResultParameter</a></code> | <code>string</code> | Used to extract a value from the result of the createRequest(Endpoint) to be used in update/deleteRequests. |
 | <code><a href="#cdk-github.GitHubResourceProps.property.deleteRequestPayload">deleteRequestPayload</a></code> | <code>string</code> | The GitHub api request payload to delete this resource. This is a JSON parseable string. |
@@ -552,13 +520,13 @@ const deleteRequestEndpoint = 'PATCH repos/octocat/Hello-World/:number'
 
 ---
 
-##### `githubTokenSecret`<sup>Required</sup> <a name="githubTokenSecret" id="cdk-github.GitHubResourceProps.property.githubTokenSecret"></a>
+##### `githubToken`<sup>Required</sup> <a name="githubToken" id="cdk-github.GitHubResourceProps.property.githubToken"></a>
 
 ```typescript
-public readonly githubTokenSecret: ISecret;
+public readonly githubToken: ISecretString;
 ```
 
-- *Type:* aws-cdk-lib.aws_secretsmanager.ISecret
+- *Type:* <a href="#cdk-github.ISecretString">ISecretString</a>
 
 The AWS secret in which the OAuth GitHub (personal) access token is stored.
 
@@ -675,6 +643,99 @@ The response body of the last GitHub api request will be written to this ssm par
 
 ---
 
+## Classes <a name="Classes" id="Classes"></a>
+
+### SecretString <a name="SecretString" id="cdk-github.SecretString"></a>
+
+#### Initializers <a name="Initializers" id="cdk-github.SecretString.Initializer"></a>
+
+```typescript
+import { SecretString } from 'cdk-github'
+
+new SecretString()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-github.SecretString.fromSecretsManager">fromSecretsManager</a></code> | Imports a SecretString from an AWS Secrets Manager secret. |
+| <code><a href="#cdk-github.SecretString.fromSecureParameter">fromSecureParameter</a></code> | Imports a SecureString Parameter from AWS SSM Parameter Store. |
+| <code><a href="#cdk-github.SecretString.fromSerializedValue">fromSerializedValue</a></code> | Imports a prior serialized ISecretString. |
+
+---
+
+##### `fromSecretsManager` <a name="fromSecretsManager" id="cdk-github.SecretString.fromSecretsManager"></a>
+
+```typescript
+import { SecretString } from 'cdk-github'
+
+SecretString.fromSecretsManager(secret: ISecret, options?: SecretsManagerSecretOptions)
+```
+
+Imports a SecretString from an AWS Secrets Manager secret.
+
+###### `secret`<sup>Required</sup> <a name="secret" id="cdk-github.SecretString.fromSecretsManager.parameter.secret"></a>
+
+- *Type:* aws-cdk-lib.aws_secretsmanager.ISecret
+
+the secret to import.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="cdk-github.SecretString.fromSecretsManager.parameter.options"></a>
+
+- *Type:* aws-cdk-lib.SecretsManagerSecretOptions
+
+the options for importing the secret (such as version or jsonField).
+
+---
+
+##### `fromSecureParameter` <a name="fromSecureParameter" id="cdk-github.SecretString.fromSecureParameter"></a>
+
+```typescript
+import { SecretString } from 'cdk-github'
+
+SecretString.fromSecureParameter(parameter: IStringParameter)
+```
+
+Imports a SecureString Parameter from AWS SSM Parameter Store.
+
+###### `parameter`<sup>Required</sup> <a name="parameter" id="cdk-github.SecretString.fromSecureParameter.parameter.parameter"></a>
+
+- *Type:* aws-cdk-lib.aws_ssm.IStringParameter
+
+the secure string parameter to import.
+
+---
+
+##### `fromSerializedValue` <a name="fromSerializedValue" id="cdk-github.SecretString.fromSerializedValue"></a>
+
+```typescript
+import { SecretString } from 'cdk-github'
+
+SecretString.fromSerializedValue(serializedValue: string)
+```
+
+Imports a prior serialized ISecretString.
+
+This method is not meant for usage outside of the cdk-github code.
+
+###### `serializedValue`<sup>Required</sup> <a name="serializedValue" id="cdk-github.SecretString.fromSerializedValue.parameter.serializedValue"></a>
+
+- *Type:* string
+
+the serialized value this ISecretString.
+
+---
+
+
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
@@ -714,6 +775,199 @@ public readonly owner: string;
 - *Default:* user account which owns the personal access token
 
 The GitHub repository owner.
+
+---
+
+### ISecretsManagerSecretString <a name="ISecretsManagerSecretString" id="cdk-github.ISecretsManagerSecretString"></a>
+
+- *Extends:* <a href="#cdk-github.ISecretString">ISecretString</a>
+
+- *Implemented By:* <a href="#cdk-github.ISecretsManagerSecretString">ISecretsManagerSecretString</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-github.ISecretsManagerSecretString.property.id">id</a></code> | <code>string</code> | The secret's identifier (secret or parameter name). |
+| <code><a href="#cdk-github.ISecretsManagerSecretString.property.type">type</a></code> | <code>string</code> | Wheter the secret is in AWS Secrets Manager or in AWS SSM Parameter Store. |
+| <code><a href="#cdk-github.ISecretsManagerSecretString.property.options">options</a></code> | <code>aws-cdk-lib.SecretsManagerSecretOptions</code> | *No description.* |
+| <code><a href="#cdk-github.ISecretsManagerSecretString.property.secret">secret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | *No description.* |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="cdk-github.ISecretsManagerSecretString.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+The secret's identifier (secret or parameter name).
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="cdk-github.ISecretsManagerSecretString.property.type"></a>
+
+```typescript
+public readonly type: string;
+```
+
+- *Type:* string
+
+Wheter the secret is in AWS Secrets Manager or in AWS SSM Parameter Store.
+
+---
+
+##### `options`<sup>Optional</sup> <a name="options" id="cdk-github.ISecretsManagerSecretString.property.options"></a>
+
+```typescript
+public readonly options: SecretsManagerSecretOptions;
+```
+
+- *Type:* aws-cdk-lib.SecretsManagerSecretOptions
+
+---
+
+##### `secret`<sup>Optional</sup> <a name="secret" id="cdk-github.ISecretsManagerSecretString.property.secret"></a>
+
+```typescript
+public readonly secret: ISecret;
+```
+
+- *Type:* aws-cdk-lib.aws_secretsmanager.ISecret
+
+---
+
+### ISecretString <a name="ISecretString" id="cdk-github.ISecretString"></a>
+
+- *Implemented By:* <a href="#cdk-github.ISecretString">ISecretString</a>, <a href="#cdk-github.ISecretsManagerSecretString">ISecretsManagerSecretString</a>, <a href="#cdk-github.ISecureStringParameterSecretString">ISecureStringParameterSecretString</a>
+
+A secret either in AWS Secrets Manager or in AWS SSM Parameter Store.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-github.ISecretString.grantRead">grantRead</a></code> | Grants reading the secret value to some role. |
+| <code><a href="#cdk-github.ISecretString.serialize">serialize</a></code> | Returns a safe string representation of this secret for passing it to the custom resource handler in the resource properties. |
+
+---
+
+##### `grantRead` <a name="grantRead" id="cdk-github.ISecretString.grantRead"></a>
+
+```typescript
+public grantRead(grantee: IGrantable): Grant
+```
+
+Grants reading the secret value to some role.
+
+###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-github.ISecretString.grantRead.parameter.grantee"></a>
+
+- *Type:* aws-cdk-lib.aws_iam.IGrantable
+
+the principal being granted permission.
+
+---
+
+##### `serialize` <a name="serialize" id="cdk-github.ISecretString.serialize"></a>
+
+```typescript
+public serialize(stack: Stack): string
+```
+
+Returns a safe string representation of this secret for passing it to the custom resource handler in the resource properties.
+
+###### `stack`<sup>Required</sup> <a name="stack" id="cdk-github.ISecretString.serialize.parameter.stack"></a>
+
+- *Type:* aws-cdk-lib.Stack
+
+the stack to which the secret is added.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-github.ISecretString.property.id">id</a></code> | <code>string</code> | The secret's identifier (secret or parameter name). |
+| <code><a href="#cdk-github.ISecretString.property.type">type</a></code> | <code>string</code> | Wheter the secret is in AWS Secrets Manager or in AWS SSM Parameter Store. |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="cdk-github.ISecretString.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+The secret's identifier (secret or parameter name).
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="cdk-github.ISecretString.property.type"></a>
+
+```typescript
+public readonly type: string;
+```
+
+- *Type:* string
+
+Wheter the secret is in AWS Secrets Manager or in AWS SSM Parameter Store.
+
+---
+
+### ISecureStringParameterSecretString <a name="ISecureStringParameterSecretString" id="cdk-github.ISecureStringParameterSecretString"></a>
+
+- *Extends:* <a href="#cdk-github.ISecretString">ISecretString</a>
+
+- *Implemented By:* <a href="#cdk-github.ISecureStringParameterSecretString">ISecureStringParameterSecretString</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-github.ISecureStringParameterSecretString.property.id">id</a></code> | <code>string</code> | The secret's identifier (secret or parameter name). |
+| <code><a href="#cdk-github.ISecureStringParameterSecretString.property.type">type</a></code> | <code>string</code> | Wheter the secret is in AWS Secrets Manager or in AWS SSM Parameter Store. |
+| <code><a href="#cdk-github.ISecureStringParameterSecretString.property.parameter">parameter</a></code> | <code>aws-cdk-lib.aws_ssm.IStringParameter</code> | *No description.* |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="cdk-github.ISecureStringParameterSecretString.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+The secret's identifier (secret or parameter name).
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="cdk-github.ISecureStringParameterSecretString.property.type"></a>
+
+```typescript
+public readonly type: string;
+```
+
+- *Type:* string
+
+Wheter the secret is in AWS Secrets Manager or in AWS SSM Parameter Store.
+
+---
+
+##### `parameter`<sup>Optional</sup> <a name="parameter" id="cdk-github.ISecureStringParameterSecretString.property.parameter"></a>
+
+```typescript
+public readonly parameter: IStringParameter;
+```
+
+- *Type:* aws-cdk-lib.aws_ssm.IStringParameter
 
 ---
 

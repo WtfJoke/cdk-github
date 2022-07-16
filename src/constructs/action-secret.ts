@@ -1,51 +1,40 @@
-import { CustomResource, Duration, Names, SecretValue, Stack } from 'aws-cdk-lib';
+import { CustomResource, Duration, Names, Stack } from 'aws-cdk-lib';
 import { Architecture } from 'aws-cdk-lib/aws-lambda';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
-import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
-import { SecretValue as CDKGitHubSecretValue } from '../handler/helper';
 import { ActionSecretHandlerFunction } from '../handler/secrets/action-secrets';
 import { ActionSecretEventProps } from '../types';
-import { IGitHubRepository } from '../types/exported';
+import { IGitHubRepository, ISecretString } from '../types/exported';
 
 export interface ActionSecretProps {
   /**
-   * The AWS secret in which the OAuth GitHub (personal) access token is stored
+   * The AWS secret in which the OAuth GitHub (personal) access token is stored.
    */
-  readonly githubTokenSecret: ISecret;
+  readonly githubToken: ISecretString;
 
   /**
-   * The GitHub repository information (owner and name)
+   * The GitHub repository information (owner and name).
    */
   readonly repository: IGitHubRepository;
 
   /**
-   * The GitHub secret name to be stored
+   * This AWS secret value will be stored in GitHub as a secret (under the name of actionSecretName).
    */
-  readonly repositorySecretName: string;
+  readonly secretToBeStored: ISecretString;
 
   /**
-   * This AWS secret value will be stored in GitHub as a secret (under the name of repositorySecretName)
+   * The GitHub secret name to be stored.
    */
-  readonly sourceSecret: ISecret;
-
-  readonly newSourceSecret: SecretValue;
-
-  /**
-   * The key of a JSON field to retrieve in sourceSecret.
-   * This can only be used if the secret stores a JSON object.
-   *
-   * @default - returns all the content stored in the Secrets Manager secret.
-   */
-  readonly sourceSecretJsonField?: string;
+  readonly actionSecretName: string;
 }
 
 export class ActionSecret extends Construct {
   constructor(scope: Construct, id: string, props: ActionSecretProps) {
     super(scope, id);
-    const { githubTokenSecret, repositorySecretName, repository, sourceSecret, sourceSecretJsonField, newSourceSecret } = props;
-    const awsRegion = Stack.of(this).region;
+    const { githubToken, actionSecretName, repository, secretToBeStored } = props;
+    const stack = Stack.of(this);
+    const awsRegion = stack.region;
     const shortId = Names.uniqueId(this).slice(-8);
 
     const handler = new ActionSecretHandlerFunction(this, 'CustomResourceHandler', {
@@ -55,28 +44,21 @@ export class ActionSecret extends Construct {
       timeout: Duration.minutes(10),
     });
 
-    githubTokenSecret.grantRead(handler);
-    sourceSecret.grantRead(handler);
+    githubToken.grantRead(handler);
+    secretToBeStored.grantRead(handler);
 
     const provider = new Provider(this, 'SecretProvider', {
       onEventHandler: handler,
       logRetention: RetentionDays.ONE_WEEK,
     });
 
-    console.log(newSourceSecret);
-    // const foo = CDKGitHubSecretValue.fromSecretValue(newSourceSecret);
-    // foo.grantRead(this, 'Secret', handler);
-
-
     const githubRepositorySecretEventProps: ActionSecretEventProps = {
-      githubTokenSecret: githubTokenSecret.secretArn,
+      githubTokenSecret: githubToken.serialize(stack),
       repositoryOwner: repository.owner,
       repositoryName: repository.name,
-      sourceSecretArn: sourceSecret.secretArn,
-      sourceSecretJsonField,
-      repositorySecretName,
+      sourceSecret: secretToBeStored.serialize(stack),
+      actionSecretName,
       awsRegion,
-      newSourceSecret: foo.originalReference,
     };
 
     new CustomResource(this, 'CustomResource', {

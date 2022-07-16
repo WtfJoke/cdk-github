@@ -64,20 +64,22 @@ All (typescript) examples can be found in the folder [examples](src/examples/).
 ## ActionSecret
 ```typescript
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
-import { ActionSecret } from 'cdk-github';
+import { ActionSecret, SecretString } from 'cdk-github';
 
 export class ActionSecretStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const githubTokenSecret = Secret.fromSecretNameV2(this, 'ghSecret', 'GITHUB_TOKEN');
-    const sourceSecret = Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', 'testcdkgithub');
+    const githubToken = SecretString.fromSecretsManager(githubTokenSecret);
+    const secretToBeStoredSecret = Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', 'testcdkgithub');
+    const secretToBeStored = SecretString.fromSecretsManager(secretToBeStoredSecret);
 
     new ActionSecret(this, 'GitHubActionSecret', {
-      githubTokenSecret,
+      githubToken,
       repository: { name: 'cdk-github', owner: 'wtfjoke' },
-      repositorySecretName: 'A_RANDOM_GITHUB_SECRET',
-      sourceSecret,
+      actionSecretName: 'A_RANDOM_GITHUB_SECRET',
+      secretToBeStored,
     });
   }
 }
@@ -87,21 +89,23 @@ export class ActionSecretStack extends Stack {
 ## ActionEnvironmentSecret
 ```typescript
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
-import { ActionEnvironmentSecret } from 'cdk-github';
+import { ActionEnvironmentSecret, SecretString } from 'cdk-github';
 
 export class ActionEnvironmentSecretStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const githubTokenSecret = Secret.fromSecretNameV2(this, 'ghSecret', 'GITHUB_TOKEN');
-    const sourceSecret = Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', 'testcdkgithub');
+    const githubToken = SecretString.fromSecretsManager(githubTokenSecret);
+    const secretToBeStoredSecret = Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', 'testcdkgithub');
+    const secretToBeStored = SecretString.fromSecretsManager(secretToBeStoredSecret);
 
     new ActionEnvironmentSecret(this, 'GitHubActionEnvironmentSecret', {
-      githubTokenSecret,
-      environment: 'dev',
+      githubToken,
       repository: { name: 'cdk-github', owner: 'wtfjoke' },
-      repositorySecretName: 'A_RANDOM_GITHUB_SECRET',
-      sourceSecret,
+      environment: 'dev',
+      actionSecretName: 'A_RANDOM_GITHUB_SECRET',
+      secretToBeStored,
     });
   }
 }
@@ -111,7 +115,7 @@ export class ActionEnvironmentSecretStack extends Stack {
 ```typescript
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
-import { GitHubResource } from 'cdk-github';
+import { GitHubResource, SecretString } from 'cdk-github';
 
 
 export class GitHubResourceIssueStack extends Stack {
@@ -119,11 +123,12 @@ export class GitHubResourceIssueStack extends Stack {
     super(scope, id, props);
 
     const githubTokenSecret = Secret.fromSecretNameV2(this, 'ghSecret', 'GITHUB_TOKEN');
+    const githubToken = SecretString.fromSecretsManager(githubTokenSecret);
     // optional
     const writeResponseToSSMParameter = StringParameter.fromSecureStringParameterAttributes(this, 'responseBody', { parameterName: '/cdk-github/encrypted-response' });
 
     new GitHubResource(this, 'GitHubIssue', {
-      githubTokenSecret,
+      githubToken,
       createRequestEndpoint: 'POST /repos/WtfJoke/dummytest/issues',
       createRequestPayload: JSON.stringify({ title: 'Testing cdk-github', body: "I'm opening an issue by using aws cdk 🎉", labels: ['bug'] }),
       createRequestResultParameter: 'number',

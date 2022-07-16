@@ -27,26 +27,7 @@ Object {
         "createRequestResultParameter": "number",
         "deleteRequestEndpoint": "PATCH /repos/WtfJoke/dummytest/issues/:number",
         "deleteRequestPayload": "{\\"state\\":\\"closed\\"}",
-        "githubTokenSecret": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":secretsmanager:",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              Object {
-                "Ref": "AWS::AccountId",
-              },
-              ":secret:GITHUB_TOKEN",
-            ],
-          ],
-        },
+        "githubTokenSecret": "{\\"type\\":\\"SECRETS_MANAGER\\",\\"id\\":\\"GITHUB_TOKEN\\"}",
       },
       "Type": "Custom::GitHubResource",
       "UpdateReplacePolicy": "Delete",
@@ -64,7 +45,7 @@ Object {
           "S3Bucket": Object {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "c0628540c4623b503f12bb232b5194b250f6353c8a8571704950a6ee3f2662e7.zip",
+          "S3Key": "ab801e0b724270a498389646b74a02ba8de9d6e1deece95bb9f00205d88f341e.zip",
         },
         "Description": "Handles the creation/deletion of a custom GitHub Resource - created by cdk-github",
         "Environment": Object {

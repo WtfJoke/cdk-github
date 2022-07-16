@@ -3,14 +3,17 @@ import { SSM } from '@aws-sdk/client-ssm';
 import { Octokit } from '@octokit/core';
 import { CdkCustomResourceResponse } from 'aws-lambda';
 import type { OnEventRequest, GitHubResourceEventProps } from '../../types';
+import { SecretString } from '../../types/exported';
+import { getValueFromSecretString } from '../secrets';
 
 const onEvent = async (event: OnEventRequest<GitHubResourceEventProps>): Promise<CdkCustomResourceResponse> => {
   console.log(`Event: ${JSON.stringify(event)}`);
   const clientConfig = { region: event.ResourceProperties.awsRegion };
   const ssmClient = new SSM(clientConfig);
   const smClient = new SecretsManager(clientConfig);
-  const githubTokenSecret = await smClient.getSecretValue(({ SecretId: event.ResourceProperties.githubTokenSecret }));
-  const octokit = new Octokit({ auth: githubTokenSecret.SecretString });
+  const githubTokenSecret = SecretString.fromSerializedValue(event.ResourceProperties.githubTokenSecret);
+  const auth = await getValueFromSecretString(githubTokenSecret, smClient, ssmClient);
+  const octokit = new Octokit({ auth });
 
   const requestType = event.RequestType;
   switch (requestType) {

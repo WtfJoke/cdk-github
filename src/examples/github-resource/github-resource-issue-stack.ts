@@ -3,6 +3,7 @@ import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { GitHubResource } from '../../constructs';
+import { SecretString } from '../../types/exported';
 
 
 export class GitHubResourceIssueStack extends Stack {
@@ -10,11 +11,12 @@ export class GitHubResourceIssueStack extends Stack {
     super(scope, id, props);
 
     const githubTokenSecret = Secret.fromSecretNameV2(this, 'ghSecret', 'GITHUB_TOKEN');
+    const githubToken = SecretString.fromSecretsManager(githubTokenSecret);
     const createRequestResultParameter = 'number';
     const writeResponseToSSMParameter = StringParameter.fromSecureStringParameterAttributes(this, 'responseBody', { parameterName: '/cdk-github/encrypted-response' });
 
     new GitHubResource(this, 'GitHubIssue', {
-      githubTokenSecret,
+      githubToken,
       createRequestEndpoint: 'POST /repos/WtfJoke/dummytest/issues',
       createRequestPayload: JSON.stringify({ title: 'Testing cdk-github', body: "I'm opening an issue by using aws cdk 🎉", labels: ['bug'] }),
       createRequestResultParameter,
