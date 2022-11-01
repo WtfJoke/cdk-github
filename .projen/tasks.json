@@ -61,7 +61,7 @@
       "description": "Create a JavaScript bundle from src/handler/github-resource/github-resource-handler.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/handler/github-resource/github-resource-handler.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/handler/github-resource/github-resource-handler.lambda/index.js\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/handler/github-resource/github-resource-handler.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/handler/github-resource/github-resource-handler.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
         }
       ]
     },
@@ -70,7 +70,7 @@
       "description": "Continuously update the JavaScript bundle from src/handler/github-resource/github-resource-handler.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/handler/github-resource/github-resource-handler.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/handler/github-resource/github-resource-handler.lambda/index.js\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/handler/github-resource/github-resource-handler.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/handler/github-resource/github-resource-handler.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -79,7 +79,7 @@
       "description": "Create a JavaScript bundle from src/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda/index.js\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
         }
       ]
     },
@@ -88,7 +88,7 @@
       "description": "Continuously update the JavaScript bundle from src/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda/index.js\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/handler/secrets/action-environment-secrets/action-environment-secret-handler.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -97,7 +97,7 @@
       "description": "Create a JavaScript bundle from src/handler/secrets/action-secrets/action-secret-handler.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/handler/secrets/action-secrets/action-secret-handler.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/handler/secrets/action-secrets/action-secret-handler.lambda/index.js\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/handler/secrets/action-secrets/action-secret-handler.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/handler/secrets/action-secrets/action-secret-handler.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
         }
       ]
     },
@@ -106,7 +106,7 @@
       "description": "Continuously update the JavaScript bundle from src/handler/secrets/action-secrets/action-secret-handler.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/handler/secrets/action-secrets/action-secret-handler.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/handler/secrets/action-secrets/action-secret-handler.lambda/index.js\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/handler/secrets/action-secrets/action-secret-handler.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/handler/secrets/action-secrets/action-secret-handler.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -353,15 +353,6 @@
         },
         {
           "spawn": "eslint"
-        }
-      ]
-    },
-    "test:update": {
-      "name": "test:update",
-      "description": "Update jest snapshots",
-      "steps": [
-        {
-          "exec": "jest --updateSnapshot"
         }
       ]
     },
