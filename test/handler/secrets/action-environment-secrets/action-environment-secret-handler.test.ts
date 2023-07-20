@@ -57,7 +57,7 @@ describe('action-environment-secret-handler', () => {
       const ghNock = nock('https://api.github.com')
         .get('/repos/WtfJoke/cdk-github')
         .reply(200, { id: '1337' })
-        .get('/repos/WtfJoke/cdk-github/actions/secrets/public-key')
+        .get('/repositories/1337/environments/dev/secrets/public-key')
         .reply(200, {
           key_id: '568250167242549743',
           key: 'v0dSAu/BswbG2uUYeKnO0aX//Ibts7ItmFRvy6tfP2s=',
@@ -95,7 +95,7 @@ describe('action-environment-secret-handler', () => {
         .reply(200, { login: 'WtfJoke' })
         .get('/repos/WtfJoke/cdk-github')
         .reply(200, { id: '1337' })
-        .get('/repos/WtfJoke/cdk-github/actions/secrets/public-key')
+        .get('/repositories/1337/environments/dev/secrets/public-key')
         .reply(200, {
           key_id: '568250167242549743',
           key: 'v0dSAu/BswbG2uUYeKnO0aX//Ibts7ItmFRvy6tfP2s=',
@@ -139,7 +139,7 @@ describe('action-environment-secret-handler', () => {
         SecretString: 'mySecretToStore',
       });
       nock('https://api.github.com')
-        .get('/repos/WtfJoke/cdk-github/actions/secrets/public-key').reply(403, {
+        .get('/repos/WtfJoke/cdk-github').reply(403, {
           message: 'Must have admin rights to Repository.',
           documentation_url: 'https://docs.github.com/rest/reference/actions#get-a-repository-public-key',
         });
@@ -170,7 +170,7 @@ describe('action-environment-secret-handler', () => {
       const ghNock = nock('https://api.github.com')
         .get('/repos/WtfJoke/cdk-github')
         .reply(200, { id: '1337' })
-        .get('/repos/WtfJoke/cdk-github/actions/secrets/public-key')
+        .get('/repositories/1337/environments/dev/secrets/public-key')
         .reply(200, {
           key_id: '568250167242549743',
           key: 'v0dSAu/BswbG2uUYeKnO0aX//Ibts7ItmFRvy6tfP2s=',
@@ -214,7 +214,7 @@ describe('action-environment-secret-handler', () => {
         SecretString: 'mySecretToStore',
       });
       nock('https://api.github.com')
-        .get('/repos/WtfJoke/cdk-github/actions/secrets/public-key').reply(403, {
+        .get('/repos/WtfJoke/cdk-github').reply(403, {
           message: 'Must have admin rights to Repository.',
           documentation_url: 'https://docs.github.com/rest/reference/actions#get-a-repository-public-key',
         });
