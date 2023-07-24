@@ -21,8 +21,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   devDeps: ['esbuild', '@types/libsodium-wrappers', '@types/aws-lambda', 'nock', 'aws-sdk-client-mock'], /* Build dependencies for this module. */
   gitignore: ['cdk.out'],
   scripts: {
-    'cdk:actionsecret:deploy': 'npx cdk deploy --app "npx ts-node --prefer-ts-exts src/examples/action-secret/action-secret-app.ts"',
-    'cdk:actionenvironmentsecret:deploy': 'npx cdk deploy --app "npx ts-node --prefer-ts-exts src/examples/action-environment-secret/action-environment-secret-app.ts"',
+    'cdk:actionsecret:deploy': 'npx cdk deploy --all --app "npx ts-node --prefer-ts-exts src/examples/action-secret/action-secret-app.ts"',
+    'cdk:actionenvironmentsecret:deploy': 'npx cdk deploy --all --app "npx ts-node --prefer-ts-exts src/examples/action-environment-secret/action-environment-secret-app.ts"',
     'cdk:githubresourceissue:deploy': 'npx cdk deploy --app "npx ts-node --prefer-ts-exts src/examples/github-resource/github-resource-issue-app.ts"',
   },
   depsUpgradeOptions: {

@@ -3,11 +3,15 @@ import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 import { ActionSecret } from '../../constructs';
 
+export interface ActionSecretStackProps extends StackProps {
+  readonly sourceSecretName: string;
+}
+
 export class ActionSecretStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+  constructor(scope: Construct, id: string, props: ActionSecretStackProps) {
     super(scope, id, props);
 
-    const sourceSecret = Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', 'cdk-github/test/structured');
+    const sourceSecret = Secret.fromSecretNameV2(this, 'secretToStoreInGitHub', props.sourceSecretName);
     const githubTokenSecret = Secret.fromSecretNameV2(this, 'ghSecret', 'GITHUB_TOKEN');
 
     new ActionSecret(this, 'GitHubActionSecret', {
