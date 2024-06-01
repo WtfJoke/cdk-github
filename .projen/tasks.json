@@ -409,7 +409,7 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/aws-lambda,@types/libsodium-wrappers,aws-sdk-client-mock,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jsii-diff,jsii-docgen,jsii-pacmak,jsii-rosetta,jsii,nock,projen,typescript,@aws-sdk/client-secrets-manager,@aws-sdk/client-ssm,@octokit/core,libsodium,libsodium-wrappers"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/aws-lambda,@types/libsodium-wrappers,aws-sdk-client-mock,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jsii-diff,jsii-docgen,jsii-pacmak,nock,projen,typescript,@aws-sdk/client-secrets-manager,@aws-sdk/client-ssm,@octokit/core,libsodium,libsodium-wrappers"
         },
         {
           "exec": "yarn install --check-files"
