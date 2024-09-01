@@ -32,14 +32,15 @@
         "CHANGELOG": "dist/changelog.md",
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
-        "RELEASE_TAG_PREFIX": ""
+        "RELEASE_TAG_PREFIX": "",
+        "BUMP_PACKAGE": "commit-and-tag-version@^12"
       },
       "steps": [
         {
           "builtin": "release/bump-version"
         }
       ],
-      "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
+      "condition": "git log --oneline -1 | grep -qv \"chore(release):\""
     },
     "bundle": {
       "name": "bundle",
@@ -398,7 +399,8 @@
         "CHANGELOG": "dist/changelog.md",
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
-        "RELEASE_TAG_PREFIX": ""
+        "RELEASE_TAG_PREFIX": "",
+        "BUMP_PACKAGE": "commit-and-tag-version@^12"
       },
       "steps": [
         {
@@ -414,13 +416,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/aws-lambda,@types/libsodium-wrappers,aws-sdk-client-mock,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jsii-diff,jsii-docgen,jsii-pacmak,nock,projen,typescript,@aws-sdk/client-secrets-manager,@aws-sdk/client-ssm,@octokit/core,libsodium,libsodium-wrappers"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/aws-lambda,@types/libsodium-wrappers,aws-sdk-client-mock,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jsii-diff,jsii-pacmak,nock,projen,typescript,@aws-sdk/client-secrets-manager,@aws-sdk/client-ssm,@octokit/core,libsodium,libsodium-wrappers"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @types/aws-lambda @types/jest @types/libsodium-wrappers @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-sdk-client-mock esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest-junit jest jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii nock projen standard-version ts-jest typescript @aws-sdk/client-secrets-manager @aws-sdk/client-ssm @octokit/core libsodium libsodium-wrappers aws-cdk-lib constructs"
+          "exec": "yarn upgrade @types/aws-lambda @types/jest @types/libsodium-wrappers @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-sdk-client-mock commit-and-tag-version esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest-junit jest jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii nock projen ts-jest typescript @aws-sdk/client-secrets-manager @aws-sdk/client-ssm @octokit/core libsodium libsodium-wrappers aws-cdk-lib constructs"
         },
         {
           "exec": "npx projen"
