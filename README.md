@@ -5,6 +5,12 @@
 [![release](https://github.com/wtfjoke/cdk-github/actions/workflows/release.yml/badge.svg)](https://github.com/wtfjoke/cdk-github/actions/workflows/release.yml)  
 ![cdk-constructs: Experimental](https://img.shields.io/badge/cdk--constructs-experimental-important.svg?style=for-the-badge) [![View on Construct Hub](https://constructs.dev/badge?package=cdk-github)](https://constructs.dev/packages/cdk-github)
 # CDK-GitHub
+> [!IMPORTANT]
+>🗄️ Archival Notice:  
+> This project has not been maintained for a while, so the author has decided to archive it.  
+> Please consider alternatives such as:
+> - [pepperdize/cdk-github](https://github.com/pepperize/cdk-github) (same goal as this construct)
+> - [CloudSnorkel/cdk-github-runners](https://github.com/CloudSnorkel/cdk-github-runners) (dedicated to creating GitHub Runners).
 
 GitHub Constructs for use in [AWS CDK](https://aws.amazon.com/cdk/) .
 
